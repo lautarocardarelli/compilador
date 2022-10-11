@@ -23,13 +23,17 @@ public class LexerTest {
   @Test
   public void comment() throws Exception {
     scan("/*This is a comment*/");
-    assertThat(nextToken()).isEqualTo(ParserSym.EOF);
+    assertThat(nextToken()).isEqualTo(ParserSym.COMMENT);
     scan("/*CommentWithoutSpaces*/");
-    assertThat(nextToken()).isEqualTo(ParserSym.EOF);
+    assertThat(nextToken()).isEqualTo(ParserSym.COMMENT);
     scan("/*99999999*/");
-    assertThat(nextToken()).isEqualTo(ParserSym.EOF);
+    assertThat(nextToken()).isEqualTo(ParserSym.COMMENT);
     scan("/*Comment99*(())***(*/");
-    assertThat(nextToken()).isEqualTo(ParserSym.EOF);
+    assertThat(nextToken()).isEqualTo(ParserSym.COMMENT);
+    scan("/* \"ewr\" es una cte string */");
+    assertThat(nextToken()).isEqualTo(ParserSym.COMMENT);
+    scan("/* var1 es una variable numérica definida previamente */");
+    assertThat(nextToken()).isEqualTo(ParserSym.COMMENT);
   }
 
   @Test
