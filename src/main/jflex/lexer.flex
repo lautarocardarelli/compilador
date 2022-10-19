@@ -62,7 +62,11 @@ DISTINTO = "!="
 ARROBA = "@"
 CARACT = "½"
 CARACT2 = "╗"
-AllowedSymbols = {Plus} | {Mult} | {Sub} | {Div} | {Assig} | {OpenBracket} | {CloseBracket} | {Porc} | {COMA} | {PUNTO_COMA} | {OPERACION_TIPO} | {ARROBA} | {CARACT} | {CARACT2} | {QuotationMark} | {PUNTO}
+WEIRD_QUOTATION_OP = “
+WEIRD_QUOTATION_CL = ”
+AllowedSymbols = {Plus} | {Mult} | {Sub} | {Div} | {Assig} | {OpenBracket} | {CloseBracket} | {Porc} | {COMA} |
+                 {PUNTO_COMA} | {OPERACION_TIPO} | {ARROBA} | {CARACT} | {CARACT2} | {QuotationMark} | {PUNTO} |
+                 {WEIRD_QUOTATION_OP} | {WEIRD_QUOTATION_CL}
 
 // Palabras reservadas
 WHILE = "WHILE" | "While" | "while"

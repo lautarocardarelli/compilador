@@ -1,6 +1,6 @@
 a = 99999.99
-a = 99
-a = 099
+a = 99.0
+a = 0.9999
 
-b = "@sdADaSjfla%dfg"
+b = ""@sdADaSjfla%dfg"
 b = "asldk  fh sjf"
