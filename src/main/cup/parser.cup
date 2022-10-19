@@ -50,6 +50,7 @@ terminal COMMENT;
 terminal PUNTO;
 
 // Non Terminals
+non terminal program;
 non terminal sentence;
 non terminal assignment;
 non terminal expression;
@@ -67,22 +68,23 @@ non terminal recursivos;
 non terminal condicioncase;
 
 // Start Symbol Definition
-start with sentence;
+start with program;
 
-sentence ::= assignment {: System.out.println("End"); :};
-sentence ::= sentence assignment {: System.out.println("End"); :};
-assignment ::= COMMENT {: System.out.println("Comment"); :};
-assignment ::= IDENTIFIER ASSIG expression {: System.out.println("IDENTIFIER ASSIG expression"); :};
-assignment ::= INIT LLAVE_ABIERTA sentencias_init LLAVE_CERRADA {: System.out.println("INIT LLAVE_ABIERTA sentencias_init LLAVE_CERRADA"); :};
-assignment ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA sentence LLAVE_CERRADA {: System.out.println("IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA assignment LLAVE_CERRADA"); :};
-assignment ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA sentence LLAVE_CERRADA ELSE LLAVE_ABIERTA sentence LLAVE_CERRADA{: System.out.println("IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA assignment LLAVE_CERRADA ELSE LLAVE ABIERA assignment LLAVE CERRADA"); :};
-assignment ::= WHILE OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA sentence LLAVE_CERRADA {: System.out.println("WHILE OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA assignment LLAVE_CERRADA"); :};
-assignment ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET"); :};
-assignment ::= WRITE OPEN_BRACKET factor CLOSE_BRACKET {: System.out.println("WRITE OPEN_BRACKET factor CLOSE_BRACKET"); :};
-assignment ::= DO factor recursivos ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO"); :};
-assignment ::= DO factor recursivos DEFAULT sentence ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO"); :};
-recursivos ::= recursivos CASE condicioncase sentence {: System.out.println("recursivos CASE condicioncase assignment"); :};
-recursivos ::= CASE condicioncase sentence {: System.out.println("CASE condicioncase assignment "); :};
+program ::= sentence {: System.out.println("End / Program"); :};
+program ::= program sentence {: System.out.println("End / Program + Sentence"); :};
+
+sentence ::= COMMENT {: System.out.println("Comment"); :};
+sentence ::= IDENTIFIER ASSIG expression {: System.out.println("IDENTIFIER ASSIG expression"); :};
+sentence ::= INIT LLAVE_ABIERTA sentencias_init LLAVE_CERRADA {: System.out.println("INIT LLAVE_ABIERTA sentencias_init LLAVE_CERRADA"); :};
+sentence ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA {: System.out.println("IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA assignment LLAVE_CERRADA"); :};
+sentence ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA ELSE LLAVE_ABIERTA program LLAVE_CERRADA{: System.out.println("IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA assignment LLAVE_CERRADA ELSE LLAVE ABIERA assignment LLAVE CERRADA"); :};
+sentence ::= WHILE OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA {: System.out.println("WHILE OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA assignment LLAVE_CERRADA"); :};
+sentence ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET"); :};
+sentence ::= WRITE OPEN_BRACKET factor CLOSE_BRACKET {: System.out.println("WRITE OPEN_BRACKET factor CLOSE_BRACKET"); :};
+sentence ::= DO factor recursivos ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO"); :};
+sentence ::= DO factor recursivos DEFAULT program ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO"); :};
+recursivos ::= recursivos CASE condicioncase program {: System.out.println("recursivos CASE condicioncase assignment"); :};
+recursivos ::= CASE condicioncase program {: System.out.println("CASE condicioncase assignment "); :};
 condicioncase ::= IDENTIFIER ASSIG factor {: System.out.println("CASE condicioncase assignment "); :};
 condicioncase ::= condicion ;
 expression ::= expression PLUS term {: System.out.println("+"); :};
