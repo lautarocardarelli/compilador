@@ -36,7 +36,7 @@ Identation =  [ \t\f]
 Space = " "
 Plus = "+"
 Mult = "*"
-Sub = "-"
+Sub = {Space}"-"{Space}
 Div = "/"
 Assig = "="
 Porc = "%"
@@ -88,8 +88,8 @@ string = "STRING" | "String" | "string"
 
 WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
-IntegerConstant = {Digit}+
-FloatConstant = {Digit}+{PUNTO}{Digit}+
+IntegerConstant = {Digit}+ | "-"?{Digit}+
+FloatConstant = {Digit}+{PUNTO}{Digit}+ | "-"?{Digit}+{PUNTO}{Digit}+
 StringConstant = {QuotationMark} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {QuotationMark}
 Comment = {Div}{Mult} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {Mult}{Div}
 
@@ -118,18 +118,7 @@ Comment = {Div}{Mult} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {Mult}{Div}
     {DEFAULT}                                 { return symbol(ParserSym.DEFAULT); }
     {ENDDO}                                   { return symbol(ParserSym.ENDDO); }
     {Comment}                                 { return symbol(ParserSym.COMMENT); }
-  /* identifiers */
-  {Identifier}                              { if (yylength() > 40) throw new InvalidLengthException("Id max length is 40 characters");
-                                              return symbol(ParserSym.IDENTIFIER, yytext()); }
-  /* Constants */
-  {IntegerConstant}                         { if (yylength() > 10) throw new InvalidIntegerException("Integer max value is: ");
-                                              return symbol(ParserSym.INTEGER_CONSTANT, yytext());
-                                            }
-  {StringConstant}                          { if (yylength() > 60) throw new InvalidLengthException("String constats supports until 40 characters");
-                                              return symbol(ParserSym.STRING_CONSTANT);
-                                            }
-  {FloatConstant}                           { if (yylength() > 60) throw new InvalidLengthException("String constats supports until 40 characters");
-                                                                                           return symbol(ParserSym.FLOAT_CONSTANT);}
+
 
   /* operators */
   {Plus}                                    { return symbol(ParserSym.PLUS); }
@@ -152,6 +141,32 @@ Comment = {Div}{Mult} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {Mult}{Div}
   {IGUAL}                                   { return symbol(ParserSym.IGUAL); }
   {DISTINTO}                                { return symbol(ParserSym.DISTINTO); }
   {PUNTO}                                   { return symbol(ParserSym.PUNTO); }
+
+    /* identifiers */
+    {Identifier}                              { if (yylength() > 40) throw new InvalidLengthException("Id max length is 40 characters");
+                                                return symbol(ParserSym.IDENTIFIER, yytext()); }
+    /* Constants */
+    {IntegerConstant}                         {
+                                                try {
+                                                    Integer number = Integer.parseInt(yytext());
+                                                    if (number > 65536 | number < -65536) throw new InvalidIntegerException("Integer max value is: 65536");
+                                                    return symbol(ParserSym.INTEGER_CONSTANT, yytext());
+                                                } catch (Exception ex) {
+                                                    throw new InvalidIntegerException("Integer max value is: 65536");
+                                                }
+                                              }
+    {StringConstant}                          { if (yylength() > 60) throw new InvalidLengthException("String constats supports until 40 characters");
+                                                return symbol(ParserSym.STRING_CONSTANT);
+                                              }
+    {FloatConstant}                           {
+                                                try {
+                                                    Float number = Float.parseFloat(yytext());
+                                                    if (number > Float.MAX_VALUE | Float.MIN_VALUE < -65536) throw new InvalidIntegerException("Float max value is:" + Float.MAX_VALUE);
+                                                    return symbol(ParserSym.FLOAT_CONSTANT, yytext());
+                                                } catch (Exception ex) {
+                                                    throw new InvalidIntegerException("Float max value is:" + Float.MAX_VALUE);
+                                                }
+                                              }
 
   /* whitespace */
   {WhiteSpace}                   { /* ignore */ }

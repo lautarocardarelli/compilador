@@ -40,6 +40,18 @@ public class LexerTest {
   public void integerConstant() throws Exception {
     scan("%d".formatted(10));
     assertThat(nextToken()).isEqualTo(ParserSym.INTEGER_CONSTANT);
+
+    scan("%d".formatted(-10));
+    assertThat(nextToken()).isEqualTo(ParserSym.INTEGER_CONSTANT);
+  }
+
+  @Test
+  public void floatConstant() throws Exception {
+    scan("%f".formatted(10.45));
+    assertThat(nextToken()).isEqualTo(ParserSym.FLOAT_CONSTANT);
+
+    scan("%f".formatted(-10.77764));
+    assertThat(nextToken()).isEqualTo(ParserSym.FLOAT_CONSTANT);
   }
   @Test
   public void testIf() throws Exception {
@@ -78,7 +90,7 @@ public class LexerTest {
     });
   }
 
-  @Disabled
+  @Test
   public void invalidNegativeIntegerConstantValue() {
     assertThrows(InvalidIntegerException.class, () -> {
       scan("%d".formatted(-9223372036854775807L));
@@ -88,7 +100,7 @@ public class LexerTest {
 
   @Test
   public void assignmentWithExpressions() throws Exception {
-    scan("c=d*(e-21)/4");
+    scan("c=d*(e - 21)/4");
     assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
     assertThat(nextToken()).isEqualTo(ParserSym.ASSIG);
     assertThat(nextToken()).isEqualTo(ParserSym.IDENTIFIER);
