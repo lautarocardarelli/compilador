@@ -15,6 +15,7 @@ import static lyc.compiler.constants.Constants.*;
 %column
 %throws CompilerException
 %eofval{
+  tabla.generate();
   return symbol(ParserSym.EOF);
 %eofval}
 
@@ -26,6 +27,8 @@ import static lyc.compiler.constants.Constants.*;
   private Symbol symbol(int type, Object value) {
     return new Symbol(type, yyline, yycolumn, value);
   }
+
+  TablaDeSimbolos tabla = new TablaDeSimbolos();
 %}
 
 
@@ -85,6 +88,7 @@ init = "INIT" | "Init" | "init"
 float = "FLOAT" | "Float" | "float"
 int = "INT" | "Int" | "int"
 string = "STRING" | "String" | "string"
+ALLEQUAL = "AllEqual" | "ALLEQUAL" | "allequal"
 
 WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
@@ -118,6 +122,7 @@ Comment = {Div}{Mult} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {Mult}{Div}
     {DEFAULT}                                 { return symbol(ParserSym.DEFAULT); }
     {ENDDO}                                   { return symbol(ParserSym.ENDDO); }
     {Comment}                                 { return symbol(ParserSym.COMMENT); }
+    {ALLEQUAL}                                { return symbol(ParserSym.ALLEQUAL); }
 
 
   /* operators */
@@ -144,24 +149,28 @@ Comment = {Div}{Mult} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {Mult}{Div}
 
     /* identifiers */
     {Identifier}                              { if (yylength() > 40) throw new InvalidLengthException("Id max length is 40 characters");
+                                                tabla.save("ID", yytext());
                                                 return symbol(ParserSym.IDENTIFIER, yytext()); }
     /* Constants */
     {IntegerConstant}                         {
                                                 try {
                                                     Integer number = Integer.parseInt(yytext());
                                                     if (number > 65536 | number < -65536) throw new InvalidIntegerException("Integer max value is: 65536");
+                                                    tabla.save("INTEGER", yytext());
                                                     return symbol(ParserSym.INTEGER_CONSTANT, yytext());
                                                 } catch (Exception ex) {
                                                     throw new InvalidIntegerException("Integer max value is: 65536");
                                                 }
                                               }
     {StringConstant}                          { if (yylength() > 60) throw new InvalidLengthException("String constats supports until 40 characters");
+                                                tabla.save("STRING", yytext());
                                                 return symbol(ParserSym.STRING_CONSTANT);
                                               }
     {FloatConstant}                           {
                                                 try {
                                                     Float number = Float.parseFloat(yytext());
                                                     if (number > Float.MAX_VALUE | Float.MIN_VALUE < -65536) throw new InvalidIntegerException("Float max value is:" + Float.MAX_VALUE);
+                                                    tabla.save("FLOAT", yytext());
                                                     return symbol(ParserSym.FLOAT_CONSTANT, yytext());
                                                 } catch (Exception ex) {
                                                     throw new InvalidIntegerException("Float max value is:" + Float.MAX_VALUE);

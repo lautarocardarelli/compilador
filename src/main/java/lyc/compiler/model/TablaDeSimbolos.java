@@ -1,5 +1,4 @@
-package lyc.compiler.files;
-
+package lyc.compiler.model;
 import lyc.compiler.model.Simbolo;
 
 import java.io.BufferedWriter;
@@ -9,7 +8,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SymbolTableGenerator implements FileGenerator{
+public class TablaDeSimbolos {
     Set<Simbolo> simbolos = new HashSet<Simbolo>();
 
     public void save(String tipo, String valor) {
@@ -19,10 +18,9 @@ public class SymbolTableGenerator implements FileGenerator{
 
         simbolos.add(new Simbolo(nombre, tipo, valor, longitud));
     }
-    @Override
-    public void generate(FileWriter fileWriter) throws IOException {
+    public void generate() throws IOException {
         try {
-            String ruta = "symbol-table.txt";
+            String ruta = "./target/symbol-table.txt";
             File file = new File(ruta);
             if (!file.exists()) {
                 file.createNewFile();

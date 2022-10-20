@@ -48,6 +48,7 @@ terminal DEFAULT;
 terminal ENDDO;
 terminal COMMENT;
 terminal PUNTO;
+terminal ALLEQUAL;
 
 // Non Terminals
 non terminal program;
