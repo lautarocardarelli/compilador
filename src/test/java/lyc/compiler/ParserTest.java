@@ -16,6 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ParserTest {
 
     @Test
+    public void allEqual() throws Exception {
+        compilationSuccessful(readFromFile("allequal.txt"));
+    }
+    @Test
     public void assignmentWithExpression() throws Exception {
         compilationSuccessful("c=d*(e - 21)/4");
     }

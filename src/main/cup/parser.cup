@@ -67,6 +67,8 @@ non terminal sentencias_init2;
 non terminal tipo_variable;
 non terminal recursivos;
 non terminal condicioncase;
+non terminal EqLista;
+non terminal ExpLista;
 
 // Start Symbol Definition
 start with program;
@@ -84,6 +86,13 @@ sentence ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("R
 sentence ::= WRITE OPEN_BRACKET factor CLOSE_BRACKET {: System.out.println("WRITE OPEN_BRACKET factor CLOSE_BRACKET"); :};
 sentence ::= DO factor recursivos ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO"); :};
 sentence ::= DO factor recursivos DEFAULT program ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO"); :};
+sentence ::= ALLEQUAL OPEN_BRACKET EqLista CLOSE_BRACKET {: System.out.println("All equal"); :};
+
+EqLista ::= EqLista COMA CORCH_ABIERTO ExpLista CORCH_CERRADO {: System.out.println("EqLista + EqLista"); :};
+EqLista ::= CORCH_ABIERTO ExpLista CORCH_CERRADO {: System.out.println("EqLista"); :};
+ExpLista ::= ExpLista COMA expression {: System.out.println("Exp Lista COMA expresion"); :};
+ExpLista ::= expression {: System.out.println("Exp Lista"); :};
+
 recursivos ::= recursivos CASE condicioncase program {: System.out.println("recursivos CASE condicioncase assignment"); :};
 recursivos ::= CASE condicioncase program {: System.out.println("CASE condicioncase assignment "); :};
 condicioncase ::= IDENTIFIER ASSIG factor {: System.out.println("CASE condicioncase assignment "); :};
