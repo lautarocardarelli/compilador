@@ -1,1 +1,92 @@
-c=d*(e-21)/4
+/* INIT VARIABLES */
+INIT {
+    a1,a2 : INT
+    pepe,pepo : FLOAT
+}
+
+/* ASIGNACIONES */
+A = 858.52
+B = pepe
+C= "JUJU"
+
+/* COMENTARIO */
+/* Esto es un comentario */
+
+/* WRITE Y READ */
+WRITE(A)
+WRITE ("HOLA")
+READ (VARIABLE)
+
+/* WHILE */
+WHILE (a > b AND b != c )
+{
+
+a = a + 9999
+ 
+}
+
+/* IF */
+IF ( NOT z > C )
+{
+
+reina = flor + lupe
+ 
+}
+
+/* IF ELSE */
+IF ( NOT z > C ) {
+    reina = flor + lupe
+}
+ELSE {
+    WRITE("ELSE")
+}
+
+/* IF ANIDADO */
+IF ( NOT z > C )
+{
+    IF (A > 3) {
+        WRITE("IF ANIDADO")
+    }
+
+}
+
+/* IF CON ANIDAMIENTO EN ELSE */
+IF ( NOT z > C ) {
+    reina = flor + lupe
+}
+ELSE {
+    IF ( NOT z > C ) {
+        reina = flor + lupe
+    }
+}
+
+/* IF DOBLE ANIDAMIENTO */
+IF ( NOT z > C ) {
+    IF (A > 3) {
+            WRITE("IF ANIDADO")
+        }
+}
+ELSE {
+    IF ( NOT z > C ) {
+        reina = flor + lupe
+    }
+}
+
+/* ALL EQUAL */
+AllEqual ( [a+w,b,c], [(d - 3)*2,e,f], [g,h,i] )
+
+/* DO CASE */
+DO f
+CASE f == 4
+
+a = 56 + l
+
+CASE f == 85
+
+a = 89 + l
+
+DEFAULT
+
+WRITE ("HOLAAA")
+
+ENDDO
