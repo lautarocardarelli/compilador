@@ -74,47 +74,47 @@ non terminal ExpLista;
 start with program;
 
 program ::= sentence {: System.out.println("End / Program"); :};
-program ::= program sentence {: System.out.println("End / Program + Sentence"); :};
+program ::= program sentence {: System.out.println("Program + Sentence"); :};
 
 sentence ::= COMMENT {: System.out.println("Comment"); :};
-sentence ::= IDENTIFIER ASSIG expression {: System.out.println("IDENTIFIER ASSIG expression"); :};
-sentence ::= INIT LLAVE_ABIERTA bloque_inicializacion LLAVE_CERRADA {: System.out.println("INIT LLAVE_ABIERTA sentencias_init LLAVE_CERRADA"); :};
-sentence ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA {: System.out.println("IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA assignment LLAVE_CERRADA"); :};
-sentence ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA ELSE LLAVE_ABIERTA program LLAVE_CERRADA{: System.out.println("IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA assignment LLAVE_CERRADA ELSE LLAVE ABIERA assignment LLAVE CERRADA"); :};
-sentence ::= WHILE OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA {: System.out.println("WHILE OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA assignment LLAVE_CERRADA"); :};
-sentence ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET"); :};
-sentence ::= WRITE OPEN_BRACKET factor CLOSE_BRACKET {: System.out.println("WRITE OPEN_BRACKET factor CLOSE_BRACKET"); :};
+sentence ::= IDENTIFIER ASSIG expression {: System.out.println("IDENTIFIER = expression [ASIGNACION] \n"); :};
+sentence ::= INIT LLAVE_ABIERTA bloque_inicializacion LLAVE_CERRADA {: System.out.println("INIT LLAVE_ABIERTA bloque inicializacion LLAVE_CERRADA \n"); :};
+sentence ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA {: System.out.println("IF Sin else \n"); :};
+sentence ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA ELSE LLAVE_ABIERTA program LLAVE_CERRADA{: System.out.println("IF con else \n"); :};
+sentence ::= WHILE OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA {: System.out.println("WHILE \n"); :};
+sentence ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET \n"); :};
+sentence ::= WRITE OPEN_BRACKET factor CLOSE_BRACKET {: System.out.println("WRITE OPEN_BRACKET factor CLOSE_BRACKET \n"); :};
 
 // do case
-sentence ::= DO factor casebody ENDDO {: System.out.println("DO factor recursivos"); :};
-sentence ::= DO factor casebody DEFAULT program ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO"); :};
-casebody ::= casebody CASE condicioncase program {: System.out.println("recursivos CASE condicioncase assignment"); :};
-casebody ::= CASE condicioncase program {: System.out.println("CASE condicioncase assignment "); :};
+sentence ::= DO factor casebody ENDDO {: System.out.println("DO factor recursivos \n"); :};
+sentence ::= DO factor casebody DEFAULT program ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO \n"); :};
+casebody ::= casebody CASE condicioncase program {: System.out.println("CASE BODY + CASE BODY \n"); :};
+casebody ::= CASE condicioncase program {: System.out.println("CASE BODY \n "); :};
 
 // al equal
-sentence ::= ALLEQUAL OPEN_BRACKET EqLista CLOSE_BRACKET {: System.out.println("All equal"); :};
-EqLista ::= EqLista COMA CORCH_ABIERTO ExpLista CORCH_CERRADO {: System.out.println("EqLista + EqLista"); :};
-EqLista ::= CORCH_ABIERTO ExpLista CORCH_CERRADO {: System.out.println("EqLista"); :};
-ExpLista ::= ExpLista COMA expression {: System.out.println("Exp Lista COMA expresion"); :};
-ExpLista ::= expression {: System.out.println("Exp Lista"); :};
+sentence ::= ALLEQUAL OPEN_BRACKET EqLista CLOSE_BRACKET {: System.out.println("All equal \n"); :};
+EqLista ::= EqLista COMA CORCH_ABIERTO ExpLista CORCH_CERRADO {: System.out.println("[EqLista] + [EqLista] \n "); :};
+EqLista ::= CORCH_ABIERTO ExpLista CORCH_CERRADO {: System.out.println("[EqLista] \n"); :};
+ExpLista ::= ExpLista COMA expression {: System.out.println("Exp Lista COMA expresion \n"); :};
+ExpLista ::= expression {: System.out.println("Exp Lista \n"); :};
 
 // Para el caso de a = 5, si el profe nos deja hacer a == 5 podemos eliminar esta regla.
-condicioncase ::= IDENTIFIER ASSIG factor {: System.out.println("CASE condicioncase assignment "); :};
+condicioncase ::= IDENTIFIER ASSIG factor {: System.out.println("CASE condicioncase assignment \n"); :};
 
 condicioncase ::= condicion ;
 
-expression ::= expression PLUS term {: System.out.println("+"); :};
-expression ::= expression SUB term {: System.out.println("-"); :};
-expression ::= term {: System.out.println("Expression = Term"); :};
+expression ::= expression PLUS term {: System.out.println("+ \n"); :};
+expression ::= expression SUB term {: System.out.println("- \n"); :};
+expression ::= term {: System.out.println("Expression = Term \n"); :};
 
-bloque_inicializacion ::= bloque_inicializacion sentencia_inicializacion OPERACION_TIPO tipo_variable {: System.out.println("Bloque inicializacion sentencia inicializacion"); :};
-bloque_inicializacion ::= sentencia_inicializacion OPERACION_TIPO tipo_variable {: System.out.println("Bloque inicializacion"); :};
-sentencia_inicializacion ::= sentencia_inicializacion COMA IDENTIFIER:id {: System.out.println("Sentencia inicializacion COMA identifier" + id); :};
-sentencia_inicializacion ::= IDENTIFIER:id {: System.out.println("Sentencia Inicializacion " + id); :};
+bloque_inicializacion ::= bloque_inicializacion sentencia_inicializacion OPERACION_TIPO tipo_variable {: System.out.println("Bloque inicializacion sentencia inicializacion \n"); :};
+bloque_inicializacion ::= sentencia_inicializacion OPERACION_TIPO tipo_variable {: System.out.println("Bloque inicializacion \n"); :};
+sentencia_inicializacion ::= sentencia_inicializacion COMA IDENTIFIER:id {: System.out.println("Sentencia inicializacion COMA identifier" + id + "\n"); :};
+sentencia_inicializacion ::= IDENTIFIER:id {: System.out.println("Sentencia Inicializacion " + id + "\n"); :};
 
-tipo_variable ::= FLOAT {: System.out.println("Variable float"); :};
-tipo_variable ::= INT {: System.out.println("Variable int"); :};
-tipo_variable ::= STRING {: System.out.println("Variable string"); :};
+tipo_variable ::= FLOAT {: System.out.println("Variable float \n"); :};
+tipo_variable ::= INT {: System.out.println("Variable int \n"); :};
+tipo_variable ::= STRING {: System.out.println("Variable string \n"); :};
 condiciones  ::= condicion operador_logico condicion {: System.out.println("condicion operador_logico condicion \n"); :};
 condiciones  ::= condicion {: System.out.println("CONDICION\n"); :};
 condicion ::= IDENTIFIER comparador factor {: System.out.println("condicion es: ID comparador constante \n"); :};
@@ -131,7 +131,7 @@ term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant ENTERA: " + constant ); :};
-factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant FLOTANTE: " + constant ); :};
-factor ::= STRING_CONSTANT:constant {: System.out.println("Constant STRING: " + constant ); :};
-factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
+factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant ENTERA: " + constant + "\n" ); :};
+factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant FLOTANTE: " + constant + "\n"); :};
+factor ::= STRING_CONSTANT:constant {: System.out.println("Constant STRING: " + constant + "\n"); :};
+factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression) \n"); :};
