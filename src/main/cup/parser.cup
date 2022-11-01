@@ -65,7 +65,7 @@ non terminal operador_logico;
 non terminal sentencias_init;
 non terminal sentencias_init2;
 non terminal tipo_variable;
-non terminal recursivos;
+non terminal casebody;
 non terminal condicioncase;
 non terminal EqLista;
 non terminal ExpLista;
@@ -86,10 +86,10 @@ sentence ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("R
 sentence ::= WRITE OPEN_BRACKET factor CLOSE_BRACKET {: System.out.println("WRITE OPEN_BRACKET factor CLOSE_BRACKET"); :};
 
 // do case
-sentence ::= DO factor recursivos ENDDO {: System.out.println("DO factor recursivos"); :};
-sentence ::= DO factor recursivos DEFAULT program ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO"); :};
-recursivos ::= recursivos CASE condicioncase program {: System.out.println("recursivos CASE condicioncase assignment"); :};
-recursivos ::= CASE condicioncase program {: System.out.println("CASE condicioncase assignment "); :};
+sentence ::= DO factor casebody ENDDO {: System.out.println("DO factor recursivos"); :};
+sentence ::= DO factor casebody DEFAULT program ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO"); :};
+casebody ::= casebody CASE condicioncase program {: System.out.println("recursivos CASE condicioncase assignment"); :};
+casebody ::= CASE condicioncase program {: System.out.println("CASE condicioncase assignment "); :};
 
 // al equal
 sentence ::= ALLEQUAL OPEN_BRACKET EqLista CLOSE_BRACKET {: System.out.println("All equal"); :};
@@ -98,9 +98,11 @@ EqLista ::= CORCH_ABIERTO ExpLista CORCH_CERRADO {: System.out.println("EqLista"
 ExpLista ::= ExpLista COMA expression {: System.out.println("Exp Lista COMA expresion"); :};
 ExpLista ::= expression {: System.out.println("Exp Lista"); :};
 
-
+// Para el caso de a = 5, si el profe nos deja hacer a == 5 podemos eliminar esta regla.
 condicioncase ::= IDENTIFIER ASSIG factor {: System.out.println("CASE condicioncase assignment "); :};
+
 condicioncase ::= condicion ;
+
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
 expression ::= term {: System.out.println("Expression = Term"); :};
