@@ -124,8 +124,8 @@ tipo_variable ::= STRING {: System.out.println("Variable string \n"); :};
 
 condiciones  ::= condicion operador_logico condicion {: System.out.println("condicion operador_logico condicion \n"); :};
 condiciones  ::= condicion {: System.out.println("CONDICION\n"); :};
-condicion ::= IDENTIFIER:id comparador factor {: System.out.println("condicion es: ID comparador constante \n"); :};
-condicion ::= NOT IDENTIFIER:id comparador factor {: System.out.println("condicion es: NOT ID comparador constante \n"); :};
+condicion ::= expression comparador expression {: System.out.println("condicion es: ID comparador constante \n"); :};
+condicion ::= NOT expression comparador expression {: System.out.println("condicion es: NOT ID comparador constante \n"); :};
 operador_logico ::= AND {: System.out.println("operador_logico es: AND \n"); :};
 operador_logico ::= OR {: System.out.println("operador_logico es: OR \n"); :};
 comparador  ::= MENOR_IG {: System.out.println("comparador es MENOR_IG \n"); :};
