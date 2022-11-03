@@ -88,8 +88,8 @@ sentence ::= INIT LLAVE_ABIERTA bloque_inicializacion LLAVE_CERRADA {: System.ou
 sentence ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA {: System.out.println("IF Sin else \n"); :};
 sentence ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA ELSE LLAVE_ABIERTA program LLAVE_CERRADA{: System.out.println("IF con else \n"); :};
 sentence ::= WHILE OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA {: System.out.println("WHILE \n"); :};
-sentence ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET \n"); :};
-sentence ::= WRITE OPEN_BRACKET factor CLOSE_BRACKET {: System.out.println("WRITE OPEN_BRACKET factor CLOSE_BRACKET \n"); :};
+sentence ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET \n"); icg.insertarEnPolaca("RED"); :};
+sentence ::= WRITE OPEN_BRACKET factor CLOSE_BRACKET {: System.out.println("WRITE OPEN_BRACKET factor CLOSE_BRACKET \n"); icg.insertarEnPolaca("WRT"); :};
 
 // do case
 sentence ::= DO factor casebody ENDDO {: System.out.println("DO factor recursivos \n"); :};
@@ -115,12 +115,13 @@ expression ::= term {: System.out.println("Expression = Term \n"); :};
 
 bloque_inicializacion ::= bloque_inicializacion sentencia_inicializacion OPERACION_TIPO tipo_variable {: System.out.println("Bloque inicializacion sentencia inicializacion \n"); :};
 bloque_inicializacion ::= sentencia_inicializacion OPERACION_TIPO tipo_variable {: System.out.println("Bloque inicializacion \n"); :};
-sentencia_inicializacion ::= sentencia_inicializacion COMA IDENTIFIER:id {: System.out.println("Sentencia inicializacion COMA identifier" + id + "\n"); :};
-sentencia_inicializacion ::= IDENTIFIER:id {: System.out.println("Sentencia Inicializacion " + id + "\n"); :};
+sentencia_inicializacion ::= sentencia_inicializacion COMA IDENTIFIER:id {: System.out.println("Sentencia inicializacion COMA identifier" + id + "\n"); icg.apilar(id); :};
+sentencia_inicializacion ::= IDENTIFIER:id {: System.out.println("Sentencia Inicializacion " + id + "\n"); icg.apilar(id); :};
 
 tipo_variable ::= FLOAT {: System.out.println("Variable float \n"); :};
 tipo_variable ::= INT {: System.out.println("Variable int \n"); :};
 tipo_variable ::= STRING {: System.out.println("Variable string \n"); :};
+
 condiciones  ::= condicion operador_logico condicion {: System.out.println("condicion operador_logico condicion \n"); :};
 condiciones  ::= condicion {: System.out.println("CONDICION\n"); :};
 condicion ::= IDENTIFIER:id comparador factor {: System.out.println("condicion es: ID comparador constante \n"); :};

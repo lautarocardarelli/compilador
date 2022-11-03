@@ -18,11 +18,13 @@ WRITE ("HOLA")
 READ (VARIABLE)
 
 /* WHILE */
-WHILE (a > b AND b != c )
-{
+WHILE (a > b AND b != c ) {
+    a = a + 9999
+}
 
-a = a + 9999
- 
+/* WHILE WITH OR CONDITION*/
+WHILE (a > b OR b != c ) {
+    a = a + 9999
 }
 
 /* IF */

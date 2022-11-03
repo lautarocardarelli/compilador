@@ -11,7 +11,7 @@ public class IntermediateCodeGenerator implements FileGenerator {
     private static Integer celdaActual = 0;
     private static Stack<Integer> cellStack = new Stack<>();
 
-    private static Stack<String> valueStack = new Stack<>();
+    private static Stack<Object> valueStack = new Stack<>();
     private static List<String> polaca = new ArrayList<String>();
 
     public void insertarEnPolaca(Object o) {
@@ -37,16 +37,16 @@ public class IntermediateCodeGenerator implements FileGenerator {
         return cellStack.pop();
     }
 
-    public void apilar(String value) {
-        valueStack.push(value);
+    public void apilar(Object value) {
+        valueStack.push(value.toString());
     }
-    public void apilarAvanzar(String value){
-        valueStack.push(value);
+    public void apilarAvanzar(Object value){
+        valueStack.push(value.toString());
         celdaActual++;
     }
 
     public String obtenerTopePilaValue(){
-        return valueStack.pop();
+        return valueStack.pop().toString();
     }
 
     public void mostrarPolaca() {
