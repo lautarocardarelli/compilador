@@ -9,7 +9,9 @@ import java.util.Stack;
 public class IntermediateCodeGenerator implements FileGenerator {
 
     private static Integer celdaActual = 0;
-    private static Stack<Integer> stack = new Stack<>();
+    private static Stack<Integer> cellStack = new Stack<>();
+
+    private static Stack<String> valueStack = new Stack<>();
     private static List<String> polaca = new ArrayList<String>();
 
     public void insertarEnPolaca(Object o) {
@@ -17,16 +19,34 @@ public class IntermediateCodeGenerator implements FileGenerator {
         celdaActual++;
     }
 
-    public void apilarCeldaActual() {
-        stack.push(polaca.size());
+    public void insertarEnPolaca(Object... objectArray) {
+        for (Object o: objectArray) {
+            polaca.add(o.toString());
+            celdaActual++;
+        }
     }
-    public void apilarAvanzar(){
-        stack.push(polaca.size());
+    public void apilarCeldaActual() {
+        cellStack.push(polaca.size());
+    }
+    public void apilarCeldaActualYAvanzar() {
+        cellStack.push(polaca.size());
         celdaActual++;
     }
 
-    public Integer obtenerTopePila(){
-        return stack.pop();
+    public Integer obtenerTopePilaCelda(){
+        return cellStack.pop();
+    }
+
+    public void apilar(String value) {
+        valueStack.push(value);
+    }
+    public void apilarAvanzar(String value){
+        valueStack.push(value);
+        celdaActual++;
+    }
+
+    public String obtenerTopePilaValue(){
+        return valueStack.pop();
     }
 
     public void mostrarPolaca() {

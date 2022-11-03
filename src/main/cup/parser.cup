@@ -7,7 +7,7 @@ import lyc.compiler.files.IntermediateCodeGenerator;
 class Parser;
 
 action code {:
-  private IntermediateCodeGenerator intermediateCodeGenerator = new IntermediateCodeGenerator();
+  private IntermediateCodeGenerator icg = new IntermediateCodeGenerator();
 :};
 
 // Terminals
@@ -78,12 +78,13 @@ non terminal ExpLista;
 // Start Symbol Definition
 start with program;
 
-program ::= sentence {: System.out.println("End / Program"); intermediateCodeGenerator.mostrarPolaca(); :};
+program ::= sentence {: System.out.println("End / Program"); :};
 program ::= program sentence {: System.out.println("Program + Sentence"); :};
 
 sentence ::= COMMENT {: System.out.println("Comment"); :};
-sentence ::= IDENTIFIER ASSIG expression {: System.out.println("IDENTIFIER = expression [ASIGNACION] \n"); :};
+sentence ::= IDENTIFIER:id ASSIG expression {: System.out.println("IDENTIFIER = expression [ASIGNACION] \n"); icg.insertarEnPolaca(id, "="); :};
 sentence ::= INIT LLAVE_ABIERTA bloque_inicializacion LLAVE_CERRADA {: System.out.println("INIT LLAVE_ABIERTA bloque inicializacion LLAVE_CERRADA \n"); :};
+
 sentence ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA {: System.out.println("IF Sin else \n"); :};
 sentence ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA ELSE LLAVE_ABIERTA program LLAVE_CERRADA{: System.out.println("IF con else \n"); :};
 sentence ::= WHILE OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA {: System.out.println("WHILE \n"); :};
@@ -108,8 +109,8 @@ condicioncase ::= IDENTIFIER ASSIG factor {: System.out.println("CASE condicionc
 
 condicioncase ::= condicion ;
 
-expression ::= expression PLUS term {: System.out.println("+ \n"); :};
-expression ::= expression SUB term {: System.out.println("- \n"); :};
+expression ::= expression PLUS term {: System.out.println("+ \n"); icg.insertarEnPolaca("+"); :};
+expression ::= expression SUB term {: System.out.println("- \n"); icg.insertarEnPolaca("-");:};
 expression ::= term {: System.out.println("Expression = Term \n"); :};
 
 bloque_inicializacion ::= bloque_inicializacion sentencia_inicializacion OPERACION_TIPO tipo_variable {: System.out.println("Bloque inicializacion sentencia inicializacion \n"); :};
@@ -122,8 +123,8 @@ tipo_variable ::= INT {: System.out.println("Variable int \n"); :};
 tipo_variable ::= STRING {: System.out.println("Variable string \n"); :};
 condiciones  ::= condicion operador_logico condicion {: System.out.println("condicion operador_logico condicion \n"); :};
 condiciones  ::= condicion {: System.out.println("CONDICION\n"); :};
-condicion ::= IDENTIFIER comparador factor {: System.out.println("condicion es: ID comparador constante \n"); :};
-condicion ::= NOT IDENTIFIER comparador factor {: System.out.println("condicion es: NOT ID comparador constante \n"); :};
+condicion ::= IDENTIFIER:id comparador factor {: System.out.println("condicion es: ID comparador constante \n"); :};
+condicion ::= NOT IDENTIFIER:id comparador factor {: System.out.println("condicion es: NOT ID comparador constante \n"); :};
 operador_logico ::= AND {: System.out.println("operador_logico es: AND \n"); :};
 operador_logico ::= OR {: System.out.println("operador_logico es: OR \n"); :};
 comparador  ::= MENOR_IG {: System.out.println("comparador es MENOR_IG \n"); :};
@@ -132,11 +133,12 @@ comparador  ::= MAYOR_IG {: System.out.println("comparador es MAYOR_IG \n"); :};
 comparador  ::= MAYOR {: System.out.println("comparador es MAYOR \n"); :};
 comparador  ::= IGUAL {: System.out.println("comparador es IGUAL \n"); :};
 comparador  ::= DISTINTO {: System.out.println("comparador es DISTINTO \n"); :};
-term ::= term MULT factor {: System.out.println("*"); :};
-term ::= term DIV factor {: System.out.println("/"); :};
+
+term ::= term MULT factor {: System.out.println("*"); icg.insertarEnPolaca("*");:};
+term ::= term DIV factor {: System.out.println("/"); icg.insertarEnPolaca("/");:};
 term ::= factor {: System.out.println("Term = factor"); :};
-factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant ENTERA: " + constant + "\n" ); intermediateCodeGenerator.insertarEnPolaca(constant);:};
-factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant FLOTANTE: " + constant); intermediateCodeGenerator.insertarEnPolaca(constant); :};
-factor ::= STRING_CONSTANT:constant {: System.out.println("Constant STRING: " + constant); :};
+factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); icg.insertarEnPolaca(id); :};
+factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant ENTERA: " + constant + "\n" ); icg.insertarEnPolaca(constant); :};
+factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant FLOTANTE: " + constant); icg.insertarEnPolaca(constant); :};
+factor ::= STRING_CONSTANT:constant {: System.out.println("Constant STRING: " + constant); icg.insertarEnPolaca(constant); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression) \n"); :};
