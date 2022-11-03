@@ -1,9 +1,14 @@
 package lyc.compiler;
 
 import java_cup.runtime.*;
+import lyc.compiler.files.IntermediateCodeGenerator;
+//import static lyc.compiler.files.Logger.log;
 
 class Parser;
 
+action code {:
+  private IntermediateCodeGenerator intermediateCodeGenerator = new IntermediateCodeGenerator();
+:};
 
 // Terminals
 terminal ASSIG;
@@ -73,7 +78,7 @@ non terminal ExpLista;
 // Start Symbol Definition
 start with program;
 
-program ::= sentence {: System.out.println("End / Program"); :};
+program ::= sentence {: System.out.println("End / Program"); intermediateCodeGenerator.mostrarPolaca(); :};
 program ::= program sentence {: System.out.println("Program + Sentence"); :};
 
 sentence ::= COMMENT {: System.out.println("Comment"); :};
@@ -131,7 +136,7 @@ term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant ENTERA: " + constant + "\n" ); :};
-factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant FLOTANTE: " + constant + "\n"); :};
-factor ::= STRING_CONSTANT:constant {: System.out.println("Constant STRING: " + constant + "\n"); :};
+factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant ENTERA: " + constant + "\n" ); intermediateCodeGenerator.insertarEnPolaca(constant);:};
+factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant FLOTANTE: " + constant); intermediateCodeGenerator.insertarEnPolaca(constant); :};
+factor ::= STRING_CONSTANT:constant {: System.out.println("Constant STRING: " + constant); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression) \n"); :};

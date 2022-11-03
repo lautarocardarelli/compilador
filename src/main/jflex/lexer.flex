@@ -164,7 +164,7 @@ Comment = {Div}{Mult} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {Mult}{Div}
                                               }
     {StringConstant}                          { if (yylength() > 60) throw new InvalidLengthException("String constats supports until 40 characters");
                                                 tabla.save("STRING", yytext());
-                                                return symbol(ParserSym.STRING_CONSTANT);
+                                                return symbol(ParserSym.STRING_CONSTANT, yytext());
                                               }
     {FloatConstant}                           {
                                                 try {
