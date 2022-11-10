@@ -93,7 +93,7 @@ ALLEQUAL = "AllEqual" | "ALLEQUAL" | "allequal"
 WhiteSpace = {LineTerminator} | {Identation}
 Identifier = {Letter} ({Letter}|{Digit})*
 IntegerConstant = {Digit}+ | "-"?{Digit}+
-FloatConstant = {Digit}+{PUNTO}{Digit}+ | "-"?{Digit}+{PUNTO}{Digit}+
+FloatConstant = "-"?{PUNTO}{Digit}+|"-"?{Digit}+{PUNTO}{Digit}*
 StringConstant = {QuotationMark} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {QuotationMark}
 Comment = {Div}{Mult} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {Mult}{Div}
 
@@ -154,12 +154,12 @@ Comment = {Div}{Mult} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {Mult}{Div}
     /* Constants */
     {IntegerConstant}                         {
                                                 try {
-                                                    Integer number = Integer.parseInt(yytext());
-                                                    if (number > 65536 | number < -65536) throw new InvalidIntegerException("Integer max value is: 65536");
+
+                                                    if (Integer.valueOf(yytext()) >= 32767 || Integer.valueOf(yytext()) <= -32768) throw new InvalidIntegerException("Integer should be between 32767 and -32767");
                                                     tabla.save("INTEGER", yytext());
                                                     return symbol(ParserSym.INTEGER_CONSTANT, yytext());
                                                 } catch (Exception ex) {
-                                                    throw new InvalidIntegerException("Integer max value is: 65536");
+                                                    throw new InvalidIntegerException("Integer should between 32767 and -32767");
                                                 }
                                               }
     {StringConstant}                          { if (yylength() -2 > 40) throw new InvalidLengthException("String constats supports until 40 characters");
@@ -168,8 +168,7 @@ Comment = {Div}{Mult} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {Mult}{Div}
                                               }
     {FloatConstant}                           {
                                                 try {
-                                                    Float number = Float.parseFloat(yytext());
-                                                    if (number > Float.MAX_VALUE | Float.MIN_VALUE < -65536) throw new InvalidIntegerException("Float max value is:" + Float.MAX_VALUE);
+                                                    if (Float.valueOf(yytext()) <= Math.pow(1.18,-38) || Float.valueOf(yytext()) >= Math.pow(3.4,38)) throw new InvalidIntegerException("Float should be between " + Math.pow(1.18,-38) + "and " + Math.pow(3.4,38));
                                                     tabla.save("FLOAT", yytext());
                                                     return symbol(ParserSym.FLOAT_CONSTANT, yytext());
                                                 } catch (Exception ex) {

@@ -11,6 +11,7 @@ import java.util.Set;
 public class TablaDeSimbolos {
     Set<Simbolo> simbolos = new HashSet<Simbolo>();
 
+
     public void save(String tipo, String valor) {
         String nombre = "_" + valor;
         int longitud = -1;

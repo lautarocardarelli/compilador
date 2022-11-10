@@ -47,10 +47,13 @@ public class LexerTest {
 
   @Test
   public void floatConstant() throws Exception {
-    scan("%f".formatted(10.45));
+    scan("99999.99");
     assertThat(nextToken()).isEqualTo(ParserSym.FLOAT_CONSTANT);
 
-    scan("%f".formatted(-10.77764));
+    scan("99.");
+    assertThat(nextToken()).isEqualTo(ParserSym.FLOAT_CONSTANT);
+
+    scan(".99");
     assertThat(nextToken()).isEqualTo(ParserSym.FLOAT_CONSTANT);
   }
   @Test
