@@ -162,7 +162,7 @@ Comment = {Div}{Mult} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {Mult}{Div}
                                                     throw new InvalidIntegerException("Integer max value is: 65536");
                                                 }
                                               }
-    {StringConstant}                          { if (yylength() > 60) throw new InvalidLengthException("String constats supports until 40 characters");
+    {StringConstant}                          { if (yylength() -2 > 40) throw new InvalidLengthException("String constats supports until 40 characters");
                                                 tabla.save("STRING", yytext());
                                                 return symbol(ParserSym.STRING_CONSTANT, yytext());
                                               }

@@ -75,6 +75,20 @@ public class LexerTest {
   }
 
   @Test
+  public void invalidStringConstantLength41Chars() {
+    assertThrows(InvalidLengthException.class, () -> {
+      scan("\"aaaaaaaaaabbbbbbbbbbccccccccccdddddddddde\"");
+      nextToken();
+    });
+  }
+
+  @Test
+  public void validStringConstant() throws Exception {
+    scan("\"aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd\"");
+    assertThat(nextToken()).isEqualTo(ParserSym.STRING_CONSTANT);
+  }
+
+  @Test
   public void invalidIdLength() {
     assertThrows(InvalidLengthException.class, () -> {
       scan(getRandomString());
