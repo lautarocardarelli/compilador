@@ -33,8 +33,6 @@ public class SymbolTableGenerator implements FileGenerator {
                 }
             });
         }*/
-
-    Set<Simbolo> simbolos = new HashSet<Simbolo>();
     public void save(String tipo, String valor) {
         switch (tipo) {
             case "ID":
