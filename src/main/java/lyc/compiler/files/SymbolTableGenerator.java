@@ -1,6 +1,8 @@
 package lyc.compiler.files;
-
 import lyc.compiler.model.Simbolo;
+
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Formatter;
@@ -31,6 +33,8 @@ public class SymbolTableGenerator implements FileGenerator {
                 }
             });
         }*/
+
+    Set<Simbolo> simbolos = new HashSet<Simbolo>();
     public void save(String tipo, String valor) {
         switch (tipo) {
             case "ID":
