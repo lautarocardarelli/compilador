@@ -7,7 +7,7 @@ import lyc.compiler.files.IntermediateCodeGenerator;
 class Parser;
 
 action code {:
-  private IntermediateCodeGenerator icg = new IntermediateCodeGenerator();
+  private IntermediateCodeGenerator icg = IntermediateCodeGenerator.getIcgInstance();
 :};
 
 // Terminals
@@ -141,6 +141,7 @@ comparador  ::= DISTINTO {: System.out.println("comparador es DISTINTO \n"); :};
 term ::= term MULT factor {: System.out.println("*"); icg.insertarEnPolaca("*");:};
 term ::= term DIV factor {: System.out.println("/"); icg.insertarEnPolaca("/");:};
 term ::= factor {: System.out.println("Term = factor"); :};
+/* chequear si existen en tabla de simbolos */
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); icg.insertarEnPolaca(id); :};
 factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant ENTERA: " + constant + "\n" ); icg.insertarEnPolaca(constant); :};
 factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant FLOTANTE: " + constant); icg.insertarEnPolaca(constant); :};

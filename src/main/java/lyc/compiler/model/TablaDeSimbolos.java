@@ -1,5 +1,4 @@
 package lyc.compiler.model;
-import lyc.compiler.model.Simbolo;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,11 +7,19 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Formatter;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TablaDeSimbolos {
     Set<Simbolo> simbolos = new HashSet<Simbolo>();
 
-
+/*    public String getToken(String token) throws TokenNotFound {
+        String result;
+        this.simbolos.forEach(simbolo -> {
+            if (simbolo.nombre == token) {
+                result = token;
+            }
+        });
+    }*/
     public void save(String tipo, String valor) {
         switch (tipo) {
             case "ID":

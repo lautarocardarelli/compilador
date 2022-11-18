@@ -1,5 +1,6 @@
 package lyc.compiler.files;
 
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,12 +8,23 @@ import java.util.List;
 import java.util.Stack;
 
 public class IntermediateCodeGenerator implements FileGenerator {
+    /* Singleton */
+    private static IntermediateCodeGenerator icg;
+    private IntermediateCodeGenerator() {
 
+    }
+    public static IntermediateCodeGenerator getIcgInstance() {
+        if (icg == null) {
+            icg = new IntermediateCodeGenerator();
+        }
+        return icg;
+    }
+    /* Fin Singleton */
     private static Integer celdaActual = 0;
     private static Stack<Integer> cellStack = new Stack<>();
 
     private static Stack<Object> valueStack = new Stack<>();
-    private static List<String> polaca = new ArrayList<String>();
+    private List<String> polaca = new ArrayList<String>();
 
     public void insertarEnPolaca(Object o) {
         polaca.add(o.toString());
@@ -54,6 +66,14 @@ public class IntermediateCodeGenerator implements FileGenerator {
     }
     @Override
     public void generate(FileWriter fileWriter) throws IOException {
-        fileWriter.write("TODO");
+        fileWriter.write("holaaaaaaaaaaaa");
+        polaca.forEach(p -> {
+            try {
+                fileWriter.write(p + "\t");
+            } catch (Exception ex) {
+
+            }
+        });
     }
 }
+
