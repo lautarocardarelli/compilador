@@ -3,6 +3,7 @@ package lyc.compiler;
 import java_cup.runtime.Symbol;
 import lyc.compiler.ParserSym;
 import lyc.compiler.model.*;
+import lyc.compiler.files.SymbolTableGenerator;
 import static lyc.compiler.constants.Constants.*;
 
 %%
@@ -15,7 +16,6 @@ import static lyc.compiler.constants.Constants.*;
 %column
 %throws CompilerException
 %eofval{
-  tabla.generate();
   return symbol(ParserSym.EOF);
 %eofval}
 
@@ -28,7 +28,7 @@ import static lyc.compiler.constants.Constants.*;
     return new Symbol(type, yyline, yycolumn, value);
   }
 
-  TablaDeSimbolos tabla = new TablaDeSimbolos();
+  SymbolTableGenerator tabla = SymbolTableGenerator.getStgInstance();
 %}
 
 
