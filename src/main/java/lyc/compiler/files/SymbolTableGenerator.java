@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Formatter;
 
 public class SymbolTableGenerator implements FileGenerator{
     Set<Simbolo> simbolos = new HashSet<Simbolo>();

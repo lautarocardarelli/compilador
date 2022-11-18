@@ -156,20 +156,20 @@ Comment = {Div}{Mult} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {Mult}{Div}
                                                 try {
 
                                                     if (Integer.valueOf(yytext()) >= 32767 || Integer.valueOf(yytext()) <= -32768) throw new InvalidIntegerException("Integer should be between 32767 and -32767");
-                                                    tabla.save("INTEGER", yytext());
+                                                    tabla.save("CTE_INTEGER", yytext());
                                                     return symbol(ParserSym.INTEGER_CONSTANT, yytext());
                                                 } catch (Exception ex) {
                                                     throw new InvalidIntegerException("Integer should between 32767 and -32767");
                                                 }
                                               }
     {StringConstant}                          { if (yylength() -2 > 40) throw new InvalidLengthException("String constats supports until 40 characters");
-                                                tabla.save("STRING", yytext());
+                                                tabla.save("CTE_STRING", yytext());
                                                 return symbol(ParserSym.STRING_CONSTANT, yytext());
                                               }
     {FloatConstant}                           {
                                                 try {
                                                     if (Float.valueOf(yytext()) <= Math.pow(1.18,-38) || Float.valueOf(yytext()) >= Math.pow(3.4,38)) throw new InvalidIntegerException("Float should be between " + Math.pow(1.18,-38) + "and " + Math.pow(3.4,38));
-                                                    tabla.save("FLOAT", yytext());
+                                                    tabla.save("CTE_FLOAT", yytext());
                                                     return symbol(ParserSym.FLOAT_CONSTANT, yytext());
                                                 } catch (Exception ex) {
                                                     throw new InvalidIntegerException("Float max value is:" + Float.MAX_VALUE);

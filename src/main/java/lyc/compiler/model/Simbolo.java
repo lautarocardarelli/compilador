@@ -9,11 +9,22 @@ public class Simbolo {
     public Simbolo(){
     }
 
-    public Simbolo(String nombre, String tipo,String valor, int longitud) {
+    public Simbolo(String nombre, String tipo, String valor, int longitud) {
         this.nombre = nombre;
         this.tipo = tipo;
         this.valor = valor;
         this.longitud = longitud;
+    }
+
+    public Simbolo(String nombre, String tipo, String valor) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.valor = valor;
+    }
+
+    public Simbolo(String nombre, String tipo) {
+        this.nombre = nombre;
+        this.tipo = tipo;
     }
 
     public String getNombre() {
@@ -33,8 +44,23 @@ public class Simbolo {
     }
 
     public void mostrar_vector(){
-
         System.out.println("Nombre: " + nombre +"Tipo: " + tipo +"Valor: " + valor + "Longitud: " + longitud+ "\n");
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Simbolo))
+            return false;
+        Simbolo other = (Simbolo)o;
+
+        if ( this.nombre.equals(other.getNombre()) && this.tipo.equals(other.getTipo()) ) return true;
+        return false;
+    }
+
+    @Override
+    public final int hashCode() {
+        return this.nombre.hashCode() + this.tipo.hashCode();
     }
 }

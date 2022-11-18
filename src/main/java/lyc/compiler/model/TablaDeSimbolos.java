@@ -7,17 +7,27 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Formatter;
 
 public class TablaDeSimbolos {
     Set<Simbolo> simbolos = new HashSet<Simbolo>();
 
 
     public void save(String tipo, String valor) {
-        String nombre = "_" + valor;
-        int longitud = -1;
-        if (tipo.compareTo("ID") == 0) longitud = valor.length();
-
-        simbolos.add(new Simbolo(nombre, tipo, valor, longitud));
+        switch (tipo) {
+            case "ID":
+                simbolos.add(new Simbolo(valor, tipo));
+                break;
+            case "CTE_STRING":
+                simbolos.add(new Simbolo("_" + valor, tipo, valor, valor.length() - 2));
+                break;
+            case "CTE_INTEGER":
+            case "CTE_FLOAT":
+                simbolos.add(new Simbolo("_" + valor, tipo, valor));
+                break;
+            default:
+                break;
+        }
     }
     public void generate() throws IOException {
         try {
@@ -28,16 +38,18 @@ public class TablaDeSimbolos {
             }
             FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write("Nombre "+ "\t  "+ "Tipo "+ "\t  "+ "valor " + " \t   "+ "Longitud "+ "\n");
+            Formatter fmt = new Formatter();
+            fmt.format("%15s %15s %15s %15s\n", "Nombre", "Tipo", "Valor", "Longitud");
             this.simbolos.forEach(simbolo -> {
                 try {
-                    bw.write(simbolo.getNombre() + "\t " + simbolo.getTipo() + "\t " + simbolo.getValor() + "\t " + simbolo.getLongitud() +"\n");
+                    fmt.format("%15s %15s %15s %15s\n", simbolo.getNombre(), simbolo.getTipo(), simbolo.getValor(), simbolo.getLongitud());
                 }
                 catch (Exception ex) {
 
                 }
 
             });
+            bw.write(String.valueOf(fmt));
             bw.close();
         } catch (Exception e) {
             e.printStackTrace();

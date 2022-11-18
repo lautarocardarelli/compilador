@@ -74,6 +74,7 @@ non terminal casebody;
 non terminal condicioncase;
 non terminal EqLista;
 non terminal ExpLista;
+non terminal allEqual;
 
 // Start Symbol Definition
 start with program;
@@ -98,7 +99,8 @@ casebody ::= casebody CASE condicioncase program {: System.out.println("CASE BOD
 casebody ::= CASE condicioncase program {: System.out.println("CASE BODY \n "); :};
 
 // al equal
-sentence ::= ALLEQUAL OPEN_BRACKET EqLista CLOSE_BRACKET {: System.out.println("All equal \n"); :};
+sentence ::= allEqual {: System.out.println("All equal ");:};
+allEqual ::= ALLEQUAL OPEN_BRACKET EqLista CLOSE_BRACKET {: System.out.println("All equal \n"); :};
 EqLista ::= EqLista COMA CORCH_ABIERTO ExpLista CORCH_CERRADO {: System.out.println("[EqLista] + [EqLista] \n "); :};
 EqLista ::= CORCH_ABIERTO ExpLista CORCH_CERRADO {: System.out.println("[EqLista] \n"); :};
 ExpLista ::= ExpLista COMA expression {: System.out.println("Exp Lista COMA expresion \n"); :};
@@ -126,6 +128,7 @@ condiciones  ::= condicion operador_logico condicion {: System.out.println("cond
 condiciones  ::= condicion {: System.out.println("CONDICION\n"); :};
 condicion ::= expression comparador expression {: System.out.println("condicion es: ID comparador constante \n"); :};
 condicion ::= NOT expression comparador expression {: System.out.println("condicion es: NOT ID comparador constante \n"); :};
+condicion ::= allEqual;
 operador_logico ::= AND {: System.out.println("operador_logico es: AND \n"); :};
 operador_logico ::= OR {: System.out.println("operador_logico es: OR \n"); :};
 comparador  ::= MENOR_IG {: System.out.println("comparador es MENOR_IG \n"); :};
