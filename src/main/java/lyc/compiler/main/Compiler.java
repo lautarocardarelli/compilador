@@ -6,6 +6,7 @@ import lyc.compiler.factories.ParserFactory;
 import lyc.compiler.files.AsmCodeGenerator;
 import lyc.compiler.files.FileOutputWriter;
 import lyc.compiler.files.IntermediateCodeGenerator;
+import lyc.compiler.files.SymbolTableGenerator;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -25,7 +26,7 @@ public final class Compiler {
         try (Reader reader = FileFactory.create("src/main/resources/input/test.txt")) {
             Parser parser = ParserFactory.create(reader);
             parser.parse();
-            //FileOutputWriter.writeOutput("symbol-table.txt", new SymbolTableGenerator());
+            FileOutputWriter.writeOutput("symbol-table.txt", SymbolTableGenerator.getStgInstance());
             FileOutputWriter.writeOutput("intermediate-code.txt", IntermediateCodeGenerator.getIcgInstance());
             FileOutputWriter.writeOutput("final.asm", new AsmCodeGenerator());
         } catch (IOException e) {
