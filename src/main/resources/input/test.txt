@@ -36,7 +36,7 @@ reina = flor + lupe
 }
 
 /* IF ELSE */
-IF ( NOT z > C ) {
+IF ( NOT z < C ) {
     reina = flor + lupe
 }
 ELSE {

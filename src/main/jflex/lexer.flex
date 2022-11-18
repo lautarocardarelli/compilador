@@ -141,6 +141,7 @@ Comment = {Div}{Mult} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {Mult}{Div}
   {LLAVE_ABIERTA}                           { return symbol(ParserSym.LLAVE_ABIERTA); }
   {LLAVE_CERRADA}                           { return symbol(ParserSym.LLAVE_CERRADA); }
   {MENOR_IG}                                { return symbol(ParserSym.MENOR_IG); }
+  {MENOR}                                   { return symbol(ParserSym.MENOR); }
   {MAYOR_IG}                                { return symbol(ParserSym.MAYOR_IG); }
   {MAYOR}                                   { return symbol(ParserSym.MAYOR); }
   {IGUAL}                                   { return symbol(ParserSym.IGUAL); }
