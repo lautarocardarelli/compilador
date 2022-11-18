@@ -4,12 +4,12 @@ public class Simbolo {
     public String nombre;
     public String tipo;
     public String valor;
-    public int longitud;
+    public String longitud;
 
     public Simbolo(){
     }
 
-    public Simbolo(String nombre, String tipo, String valor, int longitud) {
+    public Simbolo(String nombre, String tipo, String valor, String longitud) {
         this.nombre = nombre;
         this.tipo = tipo;
         this.valor = valor;
@@ -39,7 +39,7 @@ public class Simbolo {
         return valor;
     }
 
-    public int getLongitud() {
+    public String getLongitud() {
         return longitud;
     }
 

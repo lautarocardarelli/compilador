@@ -19,7 +19,7 @@ public class TablaDeSimbolos {
                 simbolos.add(new Simbolo(valor, tipo));
                 break;
             case "CTE_STRING":
-                simbolos.add(new Simbolo("_" + valor, tipo, valor, valor.length() - 2));
+                simbolos.add(new Simbolo("_" + valor, tipo, valor, Integer.toString(valor.length() - 2)));
                 break;
             case "CTE_INTEGER":
             case "CTE_FLOAT":
