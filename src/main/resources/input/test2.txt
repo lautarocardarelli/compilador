@@ -1,3 +1,6 @@
-WHILE (a > b) {
-    a = a + 9999
+IF ( z < C ) {
+    reina = flor + lupe
+}
+ELSE {
+    READ(pepe)
 }

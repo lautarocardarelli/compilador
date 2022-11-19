@@ -78,6 +78,9 @@ non terminal EqLista;
 non terminal ExpLista;
 non terminal allEqual;
 
+non terminal ifCondicion;
+non terminal ifProgram;
+
 // Start Symbol Definition
 start with program;
 
@@ -91,16 +94,15 @@ sentence ::= IDENTIFIER:id ASSIG expression {: System.out.println("IDENTIFIER = 
 sentence ::= INIT LLAVE_ABIERTA bloque_inicializacion LLAVE_CERRADA {: System.out.println("INIT LLAVE_ABIERTA bloque inicializacion LLAVE_CERRADA \n"); :};
 
 
-
-sentence ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA {: System.out.println("IF Sin else \n"); :};
-sentence ::= IF OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA program LLAVE_CERRADA ELSE LLAVE_ABIERTA program LLAVE_CERRADA {: System.out.println("IF con else \n"); :};
-//sentence ::= IF OPEN_BRACKET condiciones {: icg.IFSalto(); :} CLOSE_BRACKET LLAVE_ABIERTA {: icg.IFProgram(); :} program LLAVE_CERRADA ELSE {: icg.IFSaltoElse(); :} LLAVE_ABIERTA program {: icg.IFSaltoFinal(); :} LLAVE_CERRADA {: System.out.println("IF con else \n"); :};
-
+ifCondicion ::=  IF OPEN_BRACKET condiciones {: icg.IfCondiciones(); :} CLOSE_BRACKET;
+ifProgram ::=  LLAVE_ABIERTA program {: icg.IfPostProgram(); :} LLAVE_CERRADA;
+sentence ::= ifCondicion ifProgram {: icg.IfSaltoAlFinal(); System.out.println("IF Sin else \n"); :};
+sentence ::= ifCondicion ifProgram ELSE {: icg.IfSaltoElse(); :} LLAVE_ABIERTA program {: icg.IfSaltoAlFinal(); :} LLAVE_CERRADA {: System.out.println("IF con else \n"); :};
 
 
 sentence ::= WHILE {:icg.WhileInit();:} OPEN_BRACKET condiciones CLOSE_BRACKET LLAVE_ABIERTA {: icg.WhileCondBeforeProgram(); :} program {: icg.WhileGoToEtiq(); icg.WhileCondPostProgram(); :} LLAVE_CERRADA {: System.out.println("WHILE \n"); :};
 
-sentence ::= READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET {: System.out.println("READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET \n"); icg.insertarEnPolaca("RED"); :};
+sentence ::= READ OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {: System.out.println("READ OPEN_BRACKET IDENTIFIER CLOSE_BRACKET \n"); icg.insertarEnPolaca(id); icg.insertarEnPolaca("READ"); :};
 sentence ::= WRITE OPEN_BRACKET factor CLOSE_BRACKET {: System.out.println("WRITE OPEN_BRACKET factor CLOSE_BRACKET \n"); icg.insertarEnPolaca("WRT"); :};
 
 // do case

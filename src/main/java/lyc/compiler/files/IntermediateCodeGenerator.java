@@ -220,66 +220,66 @@ public class IntermediateCodeGenerator implements FileGenerator {
         }
     }
 
-
-    /* IF SALTOS*/
-
-    public void IFSalto() {
+    /* IF */
+    public void IfCondiciones() {
         if (_opLogico == "OR") {
             while (!stackSaltoDentro.empty()) {
                 Integer celda = Integer.parseInt(stackSaltoDentro.pop().toString());
-
-                /* Extraer a un metodo */
-                polaca.add(celda, Integer.toString(polaca.size() + 2));
-
-                insertarEnPolaca("BI");
-                _saltoOr = celdaActual;
-                celdaActual ++;
-
+                Integer pointingCell = celdaActual + 2;
+                updateCell(celda, pointingCell.toString());
             }
+            insertarEnPolaca("BI");
+            _saltoOr = celdaActual;
+            insertarEnPolaca("NULL");
         }
+
 
         if (_opLogico == "") {
             insertarEnPolaca("CMP");
-            insertarEnPolaca(getInvertedComparator(_comparador));
+            insertarEnPolaca(getInvertedJump(_comparador));
             stackSaltoFuera.add(celdaActual);
-            celdaActual ++;
         }
     }
 
-    public void IFProgram() {
+    public void IfPostProgram() {
         insertarEnPolaca("BI");
         stackSaltoFinal.add(celdaActual);
-        celdaActual ++;
+        insertarEnPolaca("NULL");
     }
 
-    public void IFSaltoElse () {
+    public void IfSaltoElse () {
         if (_opLogico == "AND") {
             while (!stackSaltoFuera.empty()) {
                 Integer celda = Integer.parseInt(stackSaltoFuera.pop().toString());
-                polaca.add(celda, celdaActual.toString());
+                updateCell(celda, celdaActual.toString());
             }
         }
 
         if (_opLogico == "OR") {
-            polaca.add(_saltoOr, celdaActual.toString());
-
+            updateCell(_saltoOr, celdaActual.toString());
         }
 
         if (_opLogico == "") {
             while (!stackSaltoFuera.empty()) {
                 Integer celda = Integer.parseInt(stackSaltoFuera.pop().toString());
-                polaca.add(celda, celdaActual.toString());
+                updateCell(celda, celdaActual.toString());
             }
         }
     }
 
-    public void IFSaltoFinal() {
+    public void IfSaltoAlFinal() {
+        if (_opLogico == "") {
+            while (!stackSaltoFuera.empty()) {
+                Integer celda = Integer.parseInt(stackSaltoFuera.pop().toString());
+                updateCell(celda, celdaActual.toString());
+            }
+        }
+
         while (!stackSaltoFinal.empty()) {
             Integer celda = Integer.parseInt(stackSaltoFinal.pop().toString());
-            polaca.add(celda, celdaActual.toString());
+            updateCell(celda, celdaActual.toString());
         }
     }
-
 
     /*While*/
     public void WhileInit() {
