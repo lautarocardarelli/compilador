@@ -23,6 +23,12 @@ public class IntermediateCodeGenerator implements FileGenerator {
     }
     /* Fin Singleton */
 
+    /* All equal */
+    boolean _firstExpList = true;
+    Integer _i = 1;
+
+    Stack<Integer> stackAllEqual = new Stack<Integer>();
+    /* Fin All Equal */
     /* Para tipar Ids */
     private ArrayList<String> listIdsToAddType = new ArrayList<String>();
 
@@ -326,6 +332,47 @@ public class IntermediateCodeGenerator implements FileGenerator {
                 Integer cellNumber = Integer.parseInt(stackSaltoFinal.pop().toString());
                 updateCell(cellNumber, celdaActual.toString());
             }
+        }
+    }
+
+    /* All Equal */
+
+    public void AllEqualInit() {
+        _firstExpList = true;
+        _i = 1;
+    }
+
+    public void AllEqualEnd() {
+        insertarEnPolaca("True", "@resul", "=");
+        insertarEnPolaca("BI");
+        Integer cell = celdaActual + 3;
+        insertarEnPolaca(cell.toString());
+
+        Integer falseIndex = celdaActual;
+        insertarEnPolaca("False", "@result", "=");
+
+        while (!stackAllEqual.empty()) {
+            Integer cellFalse = stackAllEqual.pop();
+            updateCell(cellFalse, falseIndex.toString());
+        }
+    }
+
+    public void setAllEqualI(Integer i) {
+        _i = i;
+    }
+    public void AllEqualFirstEQLista() {
+        _firstExpList = false;
+        _i = 1;
+    }
+    public void AllEqualCalcs(boolean increment) {
+        if (increment) _i ++;
+        if (_firstExpList) {
+            insertarEnPolaca("@Aux" + _i, "=");
+        } else {
+            insertarEnPolaca("@Aux", "=");
+            insertarEnPolaca("@Aux", "@Aux" + _i.toString(), "CMP", "BNE");
+            stackAllEqual.add(celdaActual);
+            insertarEnPolaca("NULL");
         }
     }
 }

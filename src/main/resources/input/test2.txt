@@ -1,6 +1,8 @@
-IF ( z < C ) {
+IF ( c > 1 AND b > 3) {
     reina = flor + lupe
 }
 ELSE {
-    READ(pepe)
+    IF ( NOT z > C ) {
+        reina = flor + lupe
+    }
 }

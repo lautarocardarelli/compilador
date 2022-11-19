@@ -112,11 +112,11 @@ casebody ::= CASE condicioncase program {: System.out.println("CASE BODY \n "); 
 
 // al equal
 sentence ::= allEqual {: System.out.println("All equal ");:};
-allEqual ::= ALLEQUAL OPEN_BRACKET EqLista CLOSE_BRACKET {: System.out.println("All equal \n"); :};
-EqLista ::= EqLista COMA CORCH_ABIERTO ExpLista CORCH_CERRADO {: System.out.println("[EqLista] + [EqLista] \n "); :};
-EqLista ::= CORCH_ABIERTO ExpLista CORCH_CERRADO {: System.out.println("[EqLista] \n"); :};
-ExpLista ::= ExpLista COMA expression {: System.out.println("Exp Lista COMA expresion \n"); :};
-ExpLista ::= expression {: System.out.println("Exp Lista \n"); :};
+allEqual ::= ALLEQUAL {:icg.AllEqualInit(); :} OPEN_BRACKET EqLista CLOSE_BRACKET {: icg.AllEqualEnd();:} {: System.out.println("All equal \n"); :};
+EqLista ::= EqLista COMA CORCH_ABIERTO ExpLista CORCH_CERRADO {: icg.setAllEqualI(1); :} {: System.out.println("[EqLista] + [EqLista] \n "); :};
+EqLista ::= CORCH_ABIERTO ExpLista CORCH_CERRADO {: icg.AllEqualFirstEQLista(); :} {: System.out.println("[EqLista] \n"); :};
+ExpLista ::= ExpLista COMA expression {: System.out.println("Exp Lista COMA expresion \n"); icg.AllEqualCalcs(true); :};
+ExpLista ::= expression {: System.out.println("Exp Lista \n"); icg.AllEqualCalcs(false); :};
 
 // Para el caso de a = 5, si el profe nos deja hacer a == 5 podemos eliminar esta regla.
 condicioncase ::= IDENTIFIER ASSIG factor {: System.out.println("CASE condicioncase assignment \n"); :};
@@ -140,7 +140,7 @@ condiciones  ::= condicion {: System.out.println("CONDICION\n"); :};
 
 condicion ::= expression comparador expression {: System.out.println("condicion es: ID comparador constante \n"); :};
 condicion ::= NOT expression comparador expression {: System.out.println("condicion es: NOT ID comparador constante \n"); icg.invertCurrentComparador(); :};
-condicion ::= allEqual;
+condicion ::= allEqual {: icg.insertarEnPolaca("@resul"); icg.insertarEnPolaca("True"); icg.setComparador("=="); :};
 
 operador_logico ::= AND {: System.out.println("operador_logico es: AND \n"); icg.setOpLogico("AND");:};
 operador_logico ::= OR {: System.out.println("operador_logico es: OR \n"); icg.setOpLogico("OR");:};
