@@ -49,6 +49,8 @@ public class IntermediateCodeGenerator implements FileGenerator {
 
     private String _comparador = "";
 
+    private Stack<Object> stackWhile = new Stack<Object>();
+
     private Stack<Object> stackSaltoFuera = new Stack<Object>();
     private Stack<Object> stackSaltoDentro = new Stack<Object>();
 
@@ -67,13 +69,16 @@ public class IntermediateCodeGenerator implements FileGenerator {
     private List<String> polaca = new ArrayList<String>();
 
     public void insertarEnPolaca(Object o) {
-        polaca.add(o.toString());
+        polaca.add(celdaActual, o.toString());
         celdaActual++;
     }
 
+    public void updateCell(Integer cellNumber, String value) {
+        polaca.set(cellNumber, value);
+    }
     public void insertarEnPolaca(Object... objectArray) {
         for (Object o: objectArray) {
-            polaca.add(o.toString());
+            polaca.add(celdaActual, o.toString());
             celdaActual++;
         }
     }
@@ -84,8 +89,8 @@ public class IntermediateCodeGenerator implements FileGenerator {
         stack.push(polaca.size());
     }
     public void pushCurrentCellAndGo(Stack<Object> stack) {
-        stack.push(polaca.size());
-        celdaActual++;
+        stack.push(celdaActual);
+        insertarEnPolaca("NULL");
     }
     public Integer getCurrentCell() {
         return polaca.size();
@@ -100,18 +105,20 @@ public class IntermediateCodeGenerator implements FileGenerator {
     }
     public void pushValueAndGo(Stack<Object> stack, Object value){
         stack.push(value.toString());
-        celdaActual++;
+        insertarEnPolaca("NULL");
     }
 
     @Override
     public void generate(FileWriter fileWriter) throws IOException {
-        polaca.forEach(p -> {
+        Integer index = 0;
+        for (String p : polaca) {
             try {
-                fileWriter.write(p + "\t");
+                fileWriter.write(index.toString() + ": " + p + "\n");
+                index++;
             } catch (Exception ex) {
 
             }
-        });
+        }
     }
 
     public String getInvertedComparator(String comparator) {
@@ -128,6 +135,45 @@ public class IntermediateCodeGenerator implements FileGenerator {
                 return "!=";
             case "!=":
                 return "==";
+            default:
+                return comparator;
+
+        }
+    }
+    public String getInvertedJump(String comparator) {
+        switch (comparator) {
+            case ">":
+                return "BLE";
+            case ">=":
+                return "BLT";
+            case "<":
+                return "BGE";
+            case "<=":
+                return "BGT";
+            case "==":
+                return "BNE";
+            case "!=":
+                return "BE";
+            default:
+                return comparator;
+
+        }
+    }
+
+    public String getJump(String comparator) {
+        switch (comparator) {
+            case ">":
+                return "BGT";
+            case ">=":
+                return "BGE";
+            case "<":
+                return "BLT";
+            case "<=":
+                return "BLE";
+            case "==":
+                return "BE";
+            case "!=":
+                return "BNE";
             default:
                 return comparator;
 
@@ -163,11 +209,13 @@ public class IntermediateCodeGenerator implements FileGenerator {
     public void insertarComparadores() {
         insertarEnPolaca("CMP");
         if (_opLogico == "AND") {
-            insertarEnPolaca(getInvertedComparator(_comparador));
+            insertarEnPolaca(getInvertedJump(_comparador));
             /* Salto al false, bloque false */
             pushCurrentCellAndGo(stackSaltoFuera);
-        } else {
-            insertarEnPolaca(_comparador);
+        }
+        if (_opLogico == "OR") {
+            insertarEnPolaca(getJump(_comparador));
+            /* Salto al true */
             pushCurrentCellAndGo(stackSaltoDentro);
         }
     }
@@ -229,6 +277,55 @@ public class IntermediateCodeGenerator implements FileGenerator {
         while (!stackSaltoFinal.empty()) {
             Integer celda = Integer.parseInt(stackSaltoFinal.pop().toString());
             polaca.add(celda, celdaActual.toString());
+        }
+    }
+
+
+    /*While*/
+    public void WhileInit() {
+        stackWhile.add(celdaActual);
+        insertarEnPolaca("WhileEtiq" + celdaActual.toString());
+    }
+
+    public void WhileCondBeforeProgram() {
+        if (_opLogico == "OR") {
+            while (!stackSaltoDentro.empty()) {
+                Integer cellNumber = Integer.parseInt(stackSaltoDentro.pop().toString());
+                Integer pointingCell = celdaActual + 2;
+                updateCell(cellNumber, pointingCell.toString());
+            }
+
+            insertarEnPolaca("BI");
+            pushCurrentCellAndGo(stackSaltoFinal);
+        }
+
+        if (_opLogico == "") {
+            insertarEnPolaca("CMP");
+            insertarEnPolaca(getInvertedJump(_comparador));
+            /* Salto al false, bloque false */
+            pushCurrentCellAndGo(stackSaltoFuera);
+        }
+
+    }
+
+    public void WhileCondPostProgram() {
+        if (_opLogico == "AND" || _opLogico == "") {
+            while (!stackSaltoFuera.empty()) {
+                Integer cellNumber = Integer.parseInt(stackSaltoFuera.pop().toString());
+                Integer pointingCell = celdaActual;
+                updateCell(cellNumber, pointingCell.toString());
+            }
+        }
+    }
+    public void WhileGoToEtiq() {
+        insertarEnPolaca("BI");
+        insertarEnPolaca(stackWhile.pop().toString());
+
+        if (_opLogico == "OR") {
+            while (!stackSaltoFinal.empty()) {
+                Integer cellNumber = Integer.parseInt(stackSaltoFinal.pop().toString());
+                updateCell(cellNumber, celdaActual.toString());
+            }
         }
     }
 }

@@ -1,5 +1,3 @@
-/* INIT VARIABLES */
-INIT {
-    a1,a2 : INT
-    pepe,pepo : FLOAT
+WHILE (a > b) {
+    a = a + 9999
 }
