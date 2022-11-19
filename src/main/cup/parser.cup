@@ -2,12 +2,21 @@ package lyc.compiler;
 
 import java_cup.runtime.*;
 import lyc.compiler.files.IntermediateCodeGenerator;
+import java.util.Stack;
+import java.util.ArrayList;
 //import static lyc.compiler.files.Logger.log;
 
 class Parser;
 
 action code {:
   private IntermediateCodeGenerator icg = IntermediateCodeGenerator.getIcgInstance();
+  String _opLogico = "";
+  String _comparador = "";
+  String _variableType = "";
+
+  private Stack<Object> stackSaltoFuera = new Stack<Object>();
+  private Stack<Object> stackSaltoDentro = new Stack<Object>();
+  private ArrayList<String> listIdsToAddType = new ArrayList<String>();
 :};
 
 // Terminals
@@ -115,35 +124,58 @@ expression ::= expression PLUS term {: System.out.println("+ \n"); icg.insertarE
 expression ::= expression SUB term {: System.out.println("- \n"); icg.insertarEnPolaca("-");:};
 expression ::= term {: System.out.println("Expression = Term \n"); :};
 
-bloque_inicializacion ::= bloque_inicializacion sentencia_inicializacion OPERACION_TIPO tipo_variable {: System.out.println("Bloque inicializacion sentencia inicializacion \n"); :};
-bloque_inicializacion ::= sentencia_inicializacion OPERACION_TIPO tipo_variable {: System.out.println("Bloque inicializacion \n"); :};
-sentencia_inicializacion ::= sentencia_inicializacion COMA IDENTIFIER:id {: System.out.println("Sentencia inicializacion COMA identifier" + id + "\n"); icg.apilar(id); :};
-sentencia_inicializacion ::= IDENTIFIER:id {: System.out.println("Sentencia Inicializacion " + id + "\n"); icg.apilar(id); :};
+bloque_inicializacion ::= bloque_inicializacion sentencia_inicializacion OPERACION_TIPO tipo_variable {: System.out.println("Bloque inicializacion sentencia inicializacion \n"); icg.addTypeToIds(_variableType);:};
+bloque_inicializacion ::= sentencia_inicializacion OPERACION_TIPO tipo_variable {: System.out.println("Bloque inicializacion \n"); icg.addTypeToIds(_variableType); :};
+sentencia_inicializacion ::= sentencia_inicializacion COMA IDENTIFIER:id {: System.out.println("Sentencia inicializacion COMA identifier" + id + "\n"); icg.pushIdToType(id.toString()); :};
+sentencia_inicializacion ::= IDENTIFIER:id {: System.out.println("Sentencia Inicializacion " + id + "\n"); icg.pushIdToType(id.toString());:};
 
-tipo_variable ::= FLOAT {: System.out.println("Variable float \n"); :};
-tipo_variable ::= INT {: System.out.println("Variable int \n"); :};
-tipo_variable ::= STRING {: System.out.println("Variable string \n"); :};
+tipo_variable ::= FLOAT {: System.out.println("Variable float \n"); _variableType = "FLOAT";:};
+tipo_variable ::= INT {: System.out.println("Variable int \n"); _variableType = "INT";:};
+tipo_variable ::= STRING {: System.out.println("Variable string \n"); _variableType = "STRING";:};
 
-condiciones  ::= condicion operador_logico condicion {: System.out.println("condicion operador_logico condicion \n"); :};
+condiciones  ::= condicion operador_logico {:
+                                                icg.insertarEnPolaca("CMP");
+                                                if (_opLogico == "AND") {
+                                                icg.insertarEnPolaca(icg.getInvertedComparator(_comparador));
+                                                /* Salto al false, bloque false */
+                                                icg.pushCurrentCellAndGo(stackSaltoFuera);
+                                                } else {
+                                                        icg.insertarEnPolaca(_comparador);
+                                                         icg.pushCurrentCellAndGo(stackSaltoDentro);
+                                                }:} condicion {:
+                                                            icg.insertarEnPolaca("CMP");
+                                                            if (_opLogico == "AND") {
+                                                                icg.insertarEnPolaca(icg.getInvertedComparator(_comparador));
+                                                                /* Salto al false, bloque false */
+                                                                icg.pushCurrentCellAndGo(stackSaltoFuera);
+                                                            } else {
+                                                                icg.insertarEnPolaca(_comparador);
+                                                                icg.pushCurrentCellAndGo(stackSaltoDentro);
+
+                                                            }
+                                                      :};
+
 condiciones  ::= condicion {: System.out.println("CONDICION\n"); :};
 condicion ::= expression comparador expression {: System.out.println("condicion es: ID comparador constante \n"); :};
 condicion ::= NOT expression comparador expression {: System.out.println("condicion es: NOT ID comparador constante \n"); :};
 condicion ::= allEqual;
-operador_logico ::= AND {: System.out.println("operador_logico es: AND \n"); :};
-operador_logico ::= OR {: System.out.println("operador_logico es: OR \n"); :};
-comparador  ::= MENOR_IG {: System.out.println("comparador es MENOR_IG \n"); :};
-comparador  ::= MENOR {: System.out.println("comparador es MENOR \n"); :};
-comparador  ::= MAYOR_IG {: System.out.println("comparador es MAYOR_IG \n"); :};
-comparador  ::= MAYOR {: System.out.println("comparador es MAYOR \n"); :};
-comparador  ::= IGUAL {: System.out.println("comparador es IGUAL \n"); :};
-comparador  ::= DISTINTO {: System.out.println("comparador es DISTINTO \n"); :};
+
+operador_logico ::= AND {: System.out.println("operador_logico es: AND \n"); _opLogico = "AND";:};
+operador_logico ::= OR {: System.out.println("operador_logico es: OR \n"); _opLogico = "OR";:};
+comparador  ::= MENOR_IG {: System.out.println("comparador es MENOR_IG \n"); _comparador = "<=";:};
+comparador  ::= MENOR {: System.out.println("comparador es MENOR \n"); _comparador = "<";:};
+comparador  ::= MAYOR_IG {: System.out.println("comparador es MAYOR_IG \n"); _comparador = ">=";:};
+comparador  ::= MAYOR {: System.out.println("comparador es MAYOR \n"); _comparador = ">";:};
+comparador  ::= IGUAL {: System.out.println("comparador es IGUAL \n"); _comparador = "==";:};
+comparador  ::= DISTINTO {: System.out.println("comparador es DISTINTO \n"); _comparador = "!=";:};
 
 term ::= term MULT factor {: System.out.println("*"); icg.insertarEnPolaca("*");:};
 term ::= term DIV factor {: System.out.println("/"); icg.insertarEnPolaca("/");:};
 term ::= factor {: System.out.println("Term = factor"); :};
+
 /* chequear si existen en tabla de simbolos */
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); icg.insertarEnPolaca(id); :};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant ENTERA: " + constant + "\n" ); icg.insertarEnPolaca(constant); :};
-factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant FLOTANTE: " + constant); icg.insertarEnPolaca(constant); :};
+factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant Int: " + constant + "\n" ); icg.insertarEnPolaca(constant); :};
+factor ::= FLOAT_CONSTANT:constant {: System.out.println("Constant Float: " + constant); icg.insertarEnPolaca(constant); :};
 factor ::= STRING_CONSTANT:constant {: System.out.println("Constant STRING: " + constant); icg.insertarEnPolaca(constant); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression) \n"); :};

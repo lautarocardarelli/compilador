@@ -33,6 +33,24 @@ public class SymbolTableGenerator implements FileGenerator {
                 }
             });
         }*/
+
+    public boolean isTokenSaved(String name) {
+        boolean result = false;
+        for (Simbolo simbolo : simbolos) {
+            if (simbolo.nombre.equals(name)) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public void updateIdType(String id, String type) {
+        for (Simbolo simbolo : simbolos) {
+            if (simbolo.nombre.equals(id)) {
+                simbolo.tipo = type;
+            }
+        }
+    }
     public void save(String tipo, String valor) {
         switch (tipo) {
             case "ID":

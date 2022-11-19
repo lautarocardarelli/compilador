@@ -1,0 +1,5 @@
+/* INIT VARIABLES */
+INIT {
+    a1,a2 : INT
+    pepe,pepo : FLOAT
+}

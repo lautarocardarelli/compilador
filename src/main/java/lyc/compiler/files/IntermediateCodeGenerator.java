@@ -1,6 +1,8 @@
 package lyc.compiler.files;
 
 
+import lyc.compiler.model.TokenNotFoundException;
+import lyc.compiler.model.VariableAlreadyDeclaredException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ public class IntermediateCodeGenerator implements FileGenerator {
     /* Singleton */
     private static IntermediateCodeGenerator icg;
     private IntermediateCodeGenerator() {
-
+        this.stg = SymbolTableGenerator.getStgInstance();
     }
     public static IntermediateCodeGenerator getIcgInstance() {
         if (icg == null) {
@@ -20,6 +22,9 @@ public class IntermediateCodeGenerator implements FileGenerator {
         return icg;
     }
     /* Fin Singleton */
+
+    private ArrayList<String> listIdsToAddType = new ArrayList<String>();
+    private SymbolTableGenerator stg;
     private static Integer celdaActual = 0;
     private static Stack<Integer> cellStack = new Stack<>();
 
@@ -37,36 +42,34 @@ public class IntermediateCodeGenerator implements FileGenerator {
             celdaActual++;
         }
     }
-    public void apilarCeldaActual() {
-        cellStack.push(polaca.size());
+
+    /* Stacks */
+
+    public void pushCurrentCell(Stack<Object> stack) {
+        stack.push(polaca.size());
     }
-    public void apilarCeldaActualYAvanzar() {
-        cellStack.push(polaca.size());
+    public void pushCurrentCellAndGo(Stack<Object> stack) {
+        stack.push(polaca.size());
+        celdaActual++;
+    }
+    public Integer getCurrentCell() {
+        return polaca.size();
+    }
+
+    public Object getTopStackAndPop(Stack<Object> stack){
+        return stack.pop();
+    }
+
+    public void pushValue(Stack<Object> stack, Object value) {
+        stack.push(value.toString());
+    }
+    public void pushValueAndGo(Stack<Object> stack, Object value){
+        stack.push(value.toString());
         celdaActual++;
     }
 
-    public Integer obtenerTopePilaCelda(){
-        return cellStack.pop();
-    }
-
-    public void apilar(Object value) {
-        valueStack.push(value.toString());
-    }
-    public void apilarAvanzar(Object value){
-        valueStack.push(value.toString());
-        celdaActual++;
-    }
-
-    public String obtenerTopePilaValue(){
-        return valueStack.pop().toString();
-    }
-
-    public void mostrarPolaca() {
-        polaca.forEach((p) -> System.out.println(p));
-    }
     @Override
     public void generate(FileWriter fileWriter) throws IOException {
-        fileWriter.write("holaaaaaaaaaaaa");
         polaca.forEach(p -> {
             try {
                 fileWriter.write(p + "\t");
@@ -74,6 +77,51 @@ public class IntermediateCodeGenerator implements FileGenerator {
 
             }
         });
+    }
+
+    public String getInvertedComparator(String comparator) {
+        switch (comparator) {
+            case ">":
+                return "<=";
+            case ">=":
+                return "<";
+            case "<":
+                return ">=";
+            case "<=":
+                return ">";
+            case "==":
+                return "!=";
+            case "!=":
+                return "==";
+            default:
+                return comparator;
+
+        }
+    }
+
+    public boolean idIsDeclaredSeveralTimes(String id) {
+        boolean result = false;
+        for (String savedId : listIdsToAddType) {
+            if (savedId == id) {
+                result = true;
+            }
+        }
+        return result;
+    }
+    public void pushIdToType(String id) throws TokenNotFoundException, VariableAlreadyDeclaredException {
+        if (!stg.isTokenSaved(id)) throw new TokenNotFoundException("Token " + id + "not found in TS");
+
+        if (idIsDeclaredSeveralTimes(id)) throw new VariableAlreadyDeclaredException("Variable " + id + "already declared");
+
+        listIdsToAddType.add(id);
+    }
+
+    public void addTypeToIds(String type) {
+        listIdsToAddType.forEach(id -> {
+            stg.updateIdType(id, type);
+        });
+
+        listIdsToAddType.clear();
     }
 }
 
