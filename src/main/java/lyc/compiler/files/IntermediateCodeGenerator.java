@@ -248,6 +248,7 @@ public class IntermediateCodeGenerator implements FileGenerator {
             insertarEnPolaca("CMP");
             insertarEnPolaca(getInvertedJump(_comparador));
             stackSaltoFuera.add(celdaActual);
+            insertarEnPolaca("NULL");
         }
     }
 
