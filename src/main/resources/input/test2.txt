@@ -1,8 +1,11 @@
-IF ( c > 1 AND b > 3) {
-    reina = flor + lupe
-}
-ELSE {
-    IF ( NOT z > C ) {
-        reina = flor + lupe
-    }
-}
+/* DO CASE */
+DO f
+CASE f == 4
+
+a = 56 + l
+
+CASE f == 85
+
+a = 89 + l
+
+ENDDO

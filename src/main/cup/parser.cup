@@ -78,8 +78,12 @@ non terminal EqLista;
 non terminal ExpLista;
 non terminal allEqual;
 
+/* Extra non terminals: Creados para partir regla y poder introducir
+   Acciones semanticas
+*/
 non terminal ifCondicion;
 non terminal ifProgram;
+non terminal doCaseInit;
 
 // Start Symbol Definition
 start with program;
@@ -106,10 +110,11 @@ sentence ::= READ OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {: System.out.println
 sentence ::= WRITE OPEN_BRACKET factor CLOSE_BRACKET {: System.out.println("WRITE OPEN_BRACKET factor CLOSE_BRACKET \n"); icg.insertarEnPolaca("WRT"); :};
 
 // do case
-sentence ::= DO factor casebody DEFAULT program ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO \n"); :};
-sentence ::= DO factor casebody ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO \n"); :};
-casebody ::= casebody CASE condicioncase program {: System.out.println("CASE BODY + CASE BODY \n"); :};
-casebody ::= CASE condicioncase program {: System.out.println("CASE BODY \n "); :};
+doCaseInit ::= DO factor {: icg.insertarEnPolaca("@fact", "="); :} casebody;
+sentence ::= doCaseInit DEFAULT {: icg.insertarEnPolaca("ETIQ_DEFAULT"); :} program {: icg.DoCaseUpdateSaltoFinal(); :} {: icg.insertarEnPolaca("ETIQ_ENDDO"); :} ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO \n"); :};
+sentence ::= doCaseInit {: icg.DoCaseUpdateSaltoFinal(); :} ENDDO {: icg.insertarEnPolaca("ETIQ_ENDDO"); :} {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO \n"); :};
+casebody ::= casebody CASE condicioncase program {: System.out.println("CASE BODY + CASE BODY \n"); icg.DoCaseEndCase(); :};
+casebody ::= CASE condicioncase program {: System.out.println("CASE BODY \n "); icg.DoCaseEndCase(); :};
 
 // al equal
 sentence ::= allEqual {: System.out.println("All equal ");:};
@@ -119,7 +124,7 @@ EqLista ::= CORCH_ABIERTO ExpLista CORCH_CERRADO {: icg.AllEqualFirstEQLista(); 
 ExpLista ::= ExpLista COMA expression {: System.out.println("Exp Lista COMA expresion \n"); icg.AllEqualCalcs(true); :};
 ExpLista ::= expression {: System.out.println("Exp Lista \n"); icg.AllEqualCalcs(false); :};
 
-condicioncase ::= IDENTIFIER:id comparador factor {: System.out.println("CASE condicioncase assignment \n"); :};
+condicioncase ::= IDENTIFIER:id {: icg.insertarEnPolaca("@fact"); :} comparador factor {: icg.DoCaseConditions(); System.out.println("CASE condicioncase assignment \n"); :};
 
 expression ::= expression PLUS term {: System.out.println("+ \n"); icg.insertarEnPolaca("+"); :};
 expression ::= expression SUB term {: System.out.println("- \n"); icg.insertarEnPolaca("-");:};

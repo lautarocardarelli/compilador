@@ -23,6 +23,10 @@ public class IntermediateCodeGenerator implements FileGenerator {
     }
     /* Fin Singleton */
 
+    /* DO Case*/
+
+    public Stack<Integer> stackDoCase = new Stack<Integer>();
+    public Stack<Integer> stackDoCaseFinal = new Stack<Integer>();
     /* All equal */
     boolean _firstExpList = true;
     Integer _i = 1;
@@ -378,6 +382,25 @@ public class IntermediateCodeGenerator implements FileGenerator {
 
     /* Do Case */
 
+    public void DoCaseConditions() {
+        insertarEnPolaca("CMP", getInvertedJump(_comparador));
+        stackDoCase.add(celdaActual);
+        insertarEnPolaca("NULL");
 
+    }
+
+    public void DoCaseEndCase() {
+        insertarEnPolaca("BI");
+        stackDoCaseFinal.add(celdaActual);
+        insertarEnPolaca("NULL");
+
+        updateCell(stackDoCase.pop(), celdaActual.toString());
+    }
+
+    public void DoCaseUpdateSaltoFinal() {
+        while (!stackDoCaseFinal.empty()) {
+            updateCell(stackDoCaseFinal.pop(), celdaActual.toString());
+        }
+    }
 }
 
