@@ -119,9 +119,7 @@ EqLista ::= CORCH_ABIERTO ExpLista CORCH_CERRADO {: icg.AllEqualFirstEQLista(); 
 ExpLista ::= ExpLista COMA expression {: System.out.println("Exp Lista COMA expresion \n"); icg.AllEqualCalcs(true); :};
 ExpLista ::= expression {: System.out.println("Exp Lista \n"); icg.AllEqualCalcs(false); :};
 
-// Para el caso de a = 5, si el profe nos deja hacer a == 5 podemos eliminar esta regla.
-condicioncase ::= IDENTIFIER ASSIG factor {: System.out.println("CASE condicioncase assignment \n"); :};
-condicioncase ::= condicion ;
+condicioncase ::= IDENTIFIER:id comparador factor {: System.out.println("CASE condicioncase assignment \n"); :};
 
 expression ::= expression PLUS term {: System.out.println("+ \n"); icg.insertarEnPolaca("+"); :};
 expression ::= expression SUB term {: System.out.println("- \n"); icg.insertarEnPolaca("-");:};
