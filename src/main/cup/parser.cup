@@ -93,7 +93,7 @@ program ::= program sentence {: System.out.println("Program + Sentence"); :};
 
 /* Delete comment */
 sentence ::= COMMENT {: System.out.println("Comment"); :};
-/*Done */
+/* Done */
 sentence ::= IDENTIFIER:id ASSIG expression {: System.out.println("IDENTIFIER = expression [ASIGNACION] \n"); icg.insertarEnPolaca(id, "="); :};
 sentence ::= INIT LLAVE_ABIERTA bloque_inicializacion LLAVE_CERRADA {: System.out.println("INIT LLAVE_ABIERTA bloque inicializacion LLAVE_CERRADA \n"); :};
 
