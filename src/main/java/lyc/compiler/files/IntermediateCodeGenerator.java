@@ -375,5 +375,9 @@ public class IntermediateCodeGenerator implements FileGenerator {
             insertarEnPolaca("NULL");
         }
     }
+
+    /* Do Case */
+
+
 }
 

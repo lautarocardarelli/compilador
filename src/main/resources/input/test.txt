@@ -118,3 +118,15 @@ DEFAULT
 WRITE ("HOLAAA")
 
 ENDDO
+
+/* DO CASE 3*/
+DO a
+CASE a == 4
+
+a = 56 + l
+
+CASE a > 85
+
+a = 89 + l
+
+ENDDO

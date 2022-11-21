@@ -107,6 +107,7 @@ sentence ::= WRITE OPEN_BRACKET factor CLOSE_BRACKET {: System.out.println("WRIT
 
 // do case
 sentence ::= DO factor casebody DEFAULT program ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO \n"); :};
+sentence ::= DO factor casebody ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO \n"); :};
 casebody ::= casebody CASE condicioncase program {: System.out.println("CASE BODY + CASE BODY \n"); :};
 casebody ::= CASE condicioncase program {: System.out.println("CASE BODY \n "); :};
 
