@@ -371,6 +371,8 @@ public class IntermediateCodeGenerator implements FileGenerator {
     }
     public void AllEqualCalcs(boolean increment) {
         if (increment) _i ++;
+        stg.save("ID", "@Aux" + _i);
+        stg.save("ID", "@Aux");
         if (_firstExpList) {
             insertarEnPolaca("@Aux" + _i, "=");
         } else {

@@ -2,14 +2,15 @@ package lyc.compiler;
 
 import java_cup.runtime.*;
 import lyc.compiler.files.IntermediateCodeGenerator;
+import lyc.compiler.files.SymbolTableGenerator;
 import java.util.Stack;
 import java.util.ArrayList;
-//import static lyc.compiler.files.Logger.log;
 
 class Parser;
 
 action code {:
   private IntermediateCodeGenerator icg = IntermediateCodeGenerator.getIcgInstance();
+  private SymbolTableGenerator stg = SymbolTableGenerator.getStgInstance();
 :};
 
 // Terminals
@@ -110,7 +111,7 @@ sentence ::= READ OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {: System.out.println
 sentence ::= WRITE OPEN_BRACKET factor CLOSE_BRACKET {: System.out.println("WRITE OPEN_BRACKET factor CLOSE_BRACKET \n"); icg.insertarEnPolaca("WRT"); :};
 
 // do case
-doCaseInit ::= DO factor {: icg.insertarEnPolaca("@fact", "="); :} casebody;
+doCaseInit ::= DO factor {: icg.insertarEnPolaca("@fact", "="); stg.save("ID", "@fact"); :} casebody;
 sentence ::= doCaseInit DEFAULT {: icg.insertarEnPolaca("ETIQ_DEFAULT"); :} program {: icg.DoCaseUpdateSaltoFinal(); :} {: icg.insertarEnPolaca("ETIQ_ENDDO"); :} ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO \n"); :};
 sentence ::= doCaseInit {: icg.DoCaseUpdateSaltoFinal(); :} ENDDO {: icg.insertarEnPolaca("ETIQ_ENDDO"); :} {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO \n"); :};
 casebody ::= casebody CASE condicioncase program {: System.out.println("CASE BODY + CASE BODY \n"); icg.DoCaseEndCase(); :};
@@ -124,7 +125,7 @@ EqLista ::= CORCH_ABIERTO ExpLista CORCH_CERRADO {: icg.AllEqualFirstEQLista(); 
 ExpLista ::= ExpLista COMA expression {: System.out.println("Exp Lista COMA expresion \n"); icg.AllEqualCalcs(true); :};
 ExpLista ::= expression {: System.out.println("Exp Lista \n"); icg.AllEqualCalcs(false); :};
 
-condicioncase ::= IDENTIFIER:id {: icg.insertarEnPolaca("@fact"); :} comparador factor {: icg.DoCaseConditions(); System.out.println("CASE condicioncase assignment \n"); :};
+condicioncase ::= IDENTIFIER:id {: icg.insertarEnPolaca("@fact"); stg.save("ID", "@fact"); :} comparador factor {: icg.DoCaseConditions(); System.out.println("CASE condicioncase assignment \n"); :};
 
 expression ::= expression PLUS term {: System.out.println("+ \n"); icg.insertarEnPolaca("+"); :};
 expression ::= expression SUB term {: System.out.println("- \n"); icg.insertarEnPolaca("-");:};
@@ -144,7 +145,7 @@ condiciones  ::= condicion {: System.out.println("CONDICION\n"); :};
 
 condicion ::= expression comparador expression {: System.out.println("condicion es: ID comparador constante \n"); :};
 condicion ::= NOT expression comparador expression {: System.out.println("condicion es: NOT ID comparador constante \n"); icg.invertCurrentComparador(); :};
-condicion ::= allEqual {: icg.insertarEnPolaca("@resul"); icg.insertarEnPolaca("True"); icg.setComparador("=="); :};
+condicion ::= allEqual {: icg.insertarEnPolaca("@resul"); stg.save("ID", "@result"); icg.insertarEnPolaca("True"); icg.setComparador("=="); :};
 
 operador_logico ::= AND {: System.out.println("operador_logico es: AND \n"); icg.setOpLogico("AND");:};
 operador_logico ::= OR {: System.out.println("operador_logico es: OR \n"); icg.setOpLogico("OR");:};

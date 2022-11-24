@@ -1,8 +1,6 @@
 package lyc.compiler.files;
 import lyc.compiler.model.Simbolo;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Formatter;
@@ -24,15 +22,6 @@ public class SymbolTableGenerator implements FileGenerator {
     /* Fin Singleton */
 
     Set<Simbolo> simbolos = new HashSet<Simbolo>();
-
-    /*    public String getToken(String token) throws TokenNotFound {
-            String result;
-            this.simbolos.forEach(simbolo -> {
-                if (simbolo.nombre == token) {
-                    result = token;
-                }
-            });
-        }*/
 
     public boolean isTokenSaved(String name) {
         boolean result = false;
