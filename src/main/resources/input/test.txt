@@ -130,3 +130,5 @@ CASE a > 85
 a = 89 + l
 
 ENDDO
+
+reina = flor + lupe

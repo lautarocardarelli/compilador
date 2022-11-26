@@ -16,14 +16,14 @@ public final class Compiler {
     private Compiler(){}
 
     public static void main(String[] args) {
-        /*if (args.length != 1) {
+        if (args.length != 1) {
             System.out.println("Filename must be provided as argument.");
             System.exit(0);
-        }*/
+        }
 
-        /*args[0]*/
+        /* src/main/resources/input/test.txt" */
 
-        try (Reader reader = FileFactory.create("src/main/resources/input/test2.txt")) {
+        try (Reader reader = FileFactory.create(args[0])) {
             Parser parser = ParserFactory.create(reader);
             parser.parse();
             FileOutputWriter.writeOutput("symbol-table.txt", SymbolTableGenerator.getStgInstance());

@@ -121,7 +121,7 @@ Comment = {Div}{Mult} ({Letter}|{Digit}|{Space}|{AllowedSymbols})* {Mult}{Div}
     {CASE}                                    { return symbol(ParserSym.CASE); }
     {DEFAULT}                                 { return symbol(ParserSym.DEFAULT); }
     {ENDDO}                                   { return symbol(ParserSym.ENDDO); }
-    {Comment}                                 { return symbol(ParserSym.COMMENT); }
+    {Comment}                                 { /* Ignore */ }
     {ALLEQUAL}                                { return symbol(ParserSym.ALLEQUAL); }
 
 
