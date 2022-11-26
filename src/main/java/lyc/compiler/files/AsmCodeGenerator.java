@@ -18,6 +18,7 @@ public class AsmCodeGenerator implements FileGenerator {
     private ArrayList<Integer> jumpTo = new ArrayList<Integer>();
     public String getAsmAuxVariable() {
         String name =  AsmAuxVariableName + AsmAuxIndex;
+        stg.save("ID", name);
         AsmAuxIndex ++;
         return name;
     }
@@ -35,7 +36,9 @@ public class AsmCodeGenerator implements FileGenerator {
         fileWriter.write("\n");
         fileWriter.write(".DATA\n");
 
-        Formatter fmt = new Formatter();
+        Formatter fmtCode = generateAssemblerCode();
+
+        Formatter fmtHeader = new Formatter();
         stg.simbolos.forEach(simbolo -> {
             String valor;
             if (simbolo.tipo == "ID") {
@@ -43,18 +46,20 @@ public class AsmCodeGenerator implements FileGenerator {
             } else {
                 valor = simbolo.getValor();
             }
-            fmt.format("%15s %15s %15s\n", simbolo.getNombre(), "dd", valor);
+            fmtHeader.format("%15s %15s %15s\n", simbolo.getNombre(), "dd", valor);
         });
 
-        fileWriter.write(String.valueOf(fmt));
+        fileWriter.write(String.valueOf(fmtHeader));
         fileWriter.write(".CODE\n");
-        fmt.close();
 
-        generateAssemblerCode(fileWriter);
+        fileWriter.write(String.valueOf(fmtCode));
     }
 
-    public void generateAssemblerCode(FileWriter fileWriter) throws IOException {
+    public Formatter generateAssemblerCode() throws IOException {
         Formatter fmt = new Formatter();
+        writeAsm(fmt, "AX,", "@DATA");
+        writeAsm(fmt, "DS,", "AX");
+        writeAsm(fmt, "es,", "ax");
 
         Integer i = 0;
         for (String p : icg.getPolaca()) {
@@ -115,7 +120,7 @@ public class AsmCodeGenerator implements FileGenerator {
             i ++;
         }
 
-        fileWriter.write(String.valueOf(fmt));
+        return fmt;
     }
 
     public String getBasicOperatorCommand(String operador) {
