@@ -84,11 +84,13 @@ public class AsmCodeGenerator implements FileGenerator {
                     writeAsm(fmt, "FSTP", auxVariable);
                     stg.save("ID", auxVariable);
                     operandos.add(auxVariable);
+                    writeAsmSingleCommand(fmt, "FFREE");
                 }
 
                 if (p == "=") {
                     writeAsm(fmt, "FLD", operandos.poll());
                     writeAsm(fmt, "FSTP", operandos.poll());
+                    writeAsmSingleCommand(fmt, "FFREE");
                 }
 
                 if (p == "CMP") {
@@ -115,11 +117,8 @@ public class AsmCodeGenerator implements FileGenerator {
                     writeAsm(fmt, "getString", operandos.poll());
                 }
             }
-
-
             i ++;
         }
-
         return fmt;
     }
 
