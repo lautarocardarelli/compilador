@@ -76,6 +76,10 @@ public class IntermediateCodeGenerator implements FileGenerator {
     private static Stack<Integer> cellStack = new Stack<>();
 
     private static Stack<Object> valueStack = new Stack<>();
+    public List<String> getPolaca() {
+        return polaca;
+    }
+
     private List<String> polaca = new ArrayList<String>();
 
     public void insertarEnPolaca(Object o) {
@@ -295,7 +299,7 @@ public class IntermediateCodeGenerator implements FileGenerator {
     /*While*/
     public void WhileInit() {
         stackWhile.add(celdaActual);
-        insertarEnPolaca("WhileEtiq" + celdaActual.toString());
+        insertarEnPolaca("ETIQ_while" + celdaActual.toString());
     }
 
     public void WhileCondBeforeProgram() {

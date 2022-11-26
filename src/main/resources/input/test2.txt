@@ -1,5 +1,4 @@
-/* IF ELSE */
-IF ( NOT z < C ) {
+IF ( z < C ) {
     reina = flor + lupe
 }
 ELSE {
