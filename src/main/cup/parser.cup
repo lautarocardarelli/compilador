@@ -112,8 +112,8 @@ sentence ::= WRITE OPEN_BRACKET factor CLOSE_BRACKET {: System.out.println("WRIT
 
 // do case
 doCaseInit ::= DO factor {: icg.insertarEnPolaca("@fact", "="); stg.save("ID", "@fact"); :} casebody;
-sentence ::= doCaseInit DEFAULT {: icg.insertarEnPolaca("ETIQ_DEFAULT"); :} program {: icg.DoCaseUpdateSaltoFinal(); :} {: icg.insertarEnPolaca("ETIQ_ENDDO"); :} ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO \n"); :};
-sentence ::= doCaseInit {: icg.DoCaseUpdateSaltoFinal(); :} ENDDO {: icg.insertarEnPolaca("ETIQ_ENDDO"); :} {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO \n"); :};
+sentence ::= doCaseInit DEFAULT program {: icg.DoCaseUpdateSaltoFinal(); :} ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO \n"); :};
+sentence ::= doCaseInit {: icg.DoCaseUpdateSaltoFinal(); :} ENDDO {: System.out.println("DO factor recursivos DEFAULT opcional ENDDO \n"); :};
 casebody ::= casebody CASE condicioncase program {: System.out.println("CASE BODY + CASE BODY \n"); icg.DoCaseEndCase(); :};
 casebody ::= CASE condicioncase program {: System.out.println("CASE BODY \n "); icg.DoCaseEndCase(); :};
 
@@ -141,11 +141,11 @@ tipo_variable ::= INT {: System.out.println("Variable int \n"); icg.setVariableT
 tipo_variable ::= STRING {: System.out.println("Variable string \n"); icg.setVariableType("STRING");:};
 
 condiciones  ::= condicion operador_logico {: icg.insertarComparadores(); :} condicion {: icg.insertarComparadores(); :};
-condiciones  ::= condicion {: System.out.println("CONDICION\n"); :};
+condiciones  ::= condicion {: System.out.println("CONDICION\n"); icg.setOpLogico("");:};
 
 condicion ::= expression comparador expression {: System.out.println("condicion es: ID comparador constante \n"); :};
 condicion ::= NOT expression comparador expression {: System.out.println("condicion es: NOT ID comparador constante \n"); icg.invertCurrentComparador(); :};
-condicion ::= allEqual {: icg.insertarEnPolaca("@resul"); stg.save("ID", "@result"); icg.insertarEnPolaca("True"); icg.setComparador("=="); :};
+condicion ::= allEqual {: icg.insertarEnPolaca("@result"); stg.save("ID", "@result"); icg.insertarEnPolaca("_1"); icg.setComparador("=="); :};
 
 operador_logico ::= AND {: System.out.println("operador_logico es: AND \n"); icg.setOpLogico("AND");:};
 operador_logico ::= OR {: System.out.println("operador_logico es: OR \n"); icg.setOpLogico("OR");:};

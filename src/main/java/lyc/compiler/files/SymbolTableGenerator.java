@@ -37,11 +37,7 @@ public class SymbolTableGenerator implements FileGenerator {
         String result = null;
         for (Simbolo simbolo : simbolos) {
             if (simbolo.nombre.equals(name)) {
-                if (simbolo.getTipo() == "ID") {
-                    result = name;
-                } else {
-                    result = simbolo.getValor();
-                }
+                result = simbolo.getNombre();
             }
         }
         return result;

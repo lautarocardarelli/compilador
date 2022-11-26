@@ -1,9 +1,9 @@
-
-
-/* IF */
-IF ( NOT z > C )
-{
-
-reina = flor + lupe
- 
+/* IF CON ALL EQUAL */
+IF ( AllEqual ( [a+w,b,c], [(d - 3)*2,e,f], [g,h,i] ) ) {
+    reina = flor + lupe
+}
+ELSE {
+    IF ( NOT z > C ) {
+        reina = flor + lupe
+    }
 }

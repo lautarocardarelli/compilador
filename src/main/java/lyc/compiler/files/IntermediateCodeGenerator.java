@@ -352,13 +352,15 @@ public class IntermediateCodeGenerator implements FileGenerator {
     }
 
     public void AllEqualEnd() {
-        insertarEnPolaca("True", "@resul", "=");
+        stg.save("CTE_INTEGER", "1");
+        stg.save("CTE_INTEGER", "0");
+        insertarEnPolaca("_1", "@result", "=");
         insertarEnPolaca("BI");
-        Integer cell = celdaActual + 3;
+        Integer cell = celdaActual + 4;
         insertarEnPolaca(cell.toString());
 
         Integer falseIndex = celdaActual;
-        insertarEnPolaca("False", "@result", "=");
+        insertarEnPolaca("_0", "@result", "=");
 
         while (!stackAllEqual.empty()) {
             Integer cellFalse = stackAllEqual.pop();
