@@ -58,8 +58,13 @@ public class AsmCodeGenerator implements FileGenerator {
 
         Integer i = 0;
         for (String p : icg.getPolaca()) {
+
             if (jumpTo.contains(i)) {
                 jumpTo.remove(i);
+                fmt.format("%15s\n", "Etiqueta" + i.toString() + ":");
+            }
+
+            if (p.startsWith("ETIQ")) {
                 fmt.format("%15s\n", "Etiqueta" + i.toString() + ":");
             }
             String operando = stg.getToken(p);
@@ -96,12 +101,13 @@ public class AsmCodeGenerator implements FileGenerator {
                     jumpTo.add(Integer.parseInt(icg.getPolaca().get(i + 1)));
                 }
 
-                if (p == "WTR") {
-
+                if (p.equals("WRT")) {
+                    writeAsm(fmt, "displayString", operandos.poll());
                 }
 
-                if (p == "READ") {
-
+                if (p.equals("READ")) {
+                    // Dependiendo del tipo del operando deberia llamar otras get
+                    writeAsm(fmt, "getString", operandos.poll());
                 }
             }
 

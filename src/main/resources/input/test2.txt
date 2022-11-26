@@ -1,6 +1,9 @@
-IF ( z < C ) {
-    reina = flor + lupe
-}
-ELSE {
-    WRITE("ELSE")
+
+
+/* IF */
+IF ( NOT z > C )
+{
+
+reina = flor + lupe
+ 
 }
